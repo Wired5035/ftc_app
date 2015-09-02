@@ -66,10 +66,20 @@ public class ProBotTeleOP extends OpMode {
 	// amount to change the claw servo position by
 	double clawDelta = 0.1;
 
+	// TO switch between tank-drive and one-stick drive!
+	boolean inTank = true;
+
+	//stuf
+	boolean guidedown = false;
+
 	DcMotor motorRight;
 	DcMotor motorLeft;
+	DcMotor motorFLeft;
+	DcMotor motorFRight;
+
 	//Servo claw;
 	//Servo arm;
+	Servo HI;
 
 	/**
 	 * Constructor
@@ -103,11 +113,15 @@ public class ProBotTeleOP extends OpMode {
 		 *    "servo_1" controls the arm joint of the manipulator.
 		 *    "servo_6" controls the claw joint of the manipulator.
 		 */
-		motorRight = hardwareMap.dcMotor.get("motor_2");
-		motorLeft = hardwareMap.dcMotor.get("motor_1");
-		motorLeft.setDirection(DcMotor.Direction.FORWARD);
-		motorRight.setDirection(DcMotor.Direction.REVERSE);
-		
+		motorRight = hardwareMap.dcMotor.get("motor_1");
+		motorLeft = hardwareMap.dcMotor.get("motor_2");
+		motorFRight = hardwareMap.dcMotor.get("motor_3");
+		motorFLeft = hardwareMap.dcMotor.get("motor_4");
+		motorLeft.setDirection(DcMotor.Direction.REVERSE);
+		motorRight.setDirection(DcMotor.Direction.FORWARD);
+		motorFLeft.setDirection(DcMotor.Direction.REVERSE);
+		motorFRight.setDirection(DcMotor.Direction.FORWARD);
+		HI = hardwareMap.servo.get("servo_1");
 		//arm = hardwareMap.servo.get("servo_1");
 		//claw = hardwareMap.servo.get("servo_6");
 
@@ -130,15 +144,30 @@ public class ProBotTeleOP extends OpMode {
 		 * Gamepad 1 controls the motors via the left stick, and it controls the
 		 * wrist/claw via the a,b, x, y buttons
 		 */
+		float right;
+		float left;
+		if ((gamepad1.guide) && (guidedown == false))
+		{
+			inTank = !inTank;
+		}
 
-		// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
-		// 1 is full down
-		// direction: left_stick_x ranges from -1 to 1, where -1 is full left
-		// and 1 is full right
-		float throttle = -gamepad1.left_stick_y;
-		float direction = gamepad1.left_stick_x;
-		float right = throttle + direction;
-		float left = throttle - direction;
+		if (inTank) {
+			left = -gamepad1.right_stick_y;
+			right = -gamepad1.left_stick_y;
+			HI.setPosition(1.0);
+		}
+		else
+		{
+			// throttle: left_stick_y ranges from -1 to 1, where -1 is full up, and
+			// 1 is full down
+			// direction: left_stick_x ranges from -1 to 1, where -1 is full left
+			// and 1 is full right
+			float throttle = -gamepad1.left_stick_y;
+			float direction = gamepad1.left_stick_x;
+			left = throttle - direction;
+			right = throttle + direction;
+			HI.setPosition(0.5);
+		}
 
 		// clip the right/left values so that the values never exceed +/- 1
 		right = Range.clip(right, -1, 1);
@@ -152,6 +181,8 @@ public class ProBotTeleOP extends OpMode {
 		// write the values to the motors
 		motorRight.setPower(right);
 		motorLeft.setPower(left);
+		motorFRight.setPower(right);
+		motorFLeft.setPower(left);
 
 		// update the position of the arm.
 		if (gamepad1.a) {
@@ -196,8 +227,17 @@ public class ProBotTeleOP extends OpMode {
         telemetry.addData("claw", "claw:  " + String.format("%.2f", clawPosition));
         telemetry.addData("left tgt pwr",  "left  pwr: " + String.format("%.2f", left));
         telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
-
+		if (inTank) {
+			telemetry.addData("DRIVE!","Tank Drive: ON");
+		}
+		else
+		{
+			telemetry.addData("DRIVE!","Tank Drive: OFF");
+		}
+		guidedown = gamepad1.guide;
 	}
+
+
 
 	/*
 	 * Code to run when the op mode is first disabled goes here
