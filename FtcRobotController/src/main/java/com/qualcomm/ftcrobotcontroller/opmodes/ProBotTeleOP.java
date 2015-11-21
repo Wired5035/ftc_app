@@ -33,6 +33,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 public class ProBotTeleOP extends OpMode {
@@ -44,11 +45,19 @@ public class ProBotTeleOP extends OpMode {
 	//stuf
 	boolean guideDown = false;
 
-	DcMotor motorRight;
-	DcMotor motorLeft;
+	DcMotor motorRightRemote1;
+	DcMotor motorLeftRemote1;
+	DcMotor hookWinchRightRemote2;
+	DcMotor hookWinchLeftRemote2;
+	DcMotor telescopeExtendMotorRemote2;
+	Servo bucketServoRemote1;
+	Servo bucketArmServoRemote1;
+	Servo telescopingPVCDropRightRemote2;
+	Servo telescopingPVCDropLeftRemote2;
+	Servo firstLinkPVCExtendOrRetractRightRemote2;
+	Servo firstLinkPVCExtendOrRetractLeftRemote2;
 
-
-	/**
+	/*
 	 * Constructor
 	 */
 	public ProBotTeleOP() {
@@ -63,10 +72,19 @@ public class ProBotTeleOP extends OpMode {
 	@Override
 	public void init() {
 
-		motorRight = hardwareMap.dcMotor.get("right");
-		motorLeft = hardwareMap.dcMotor.get("left");
-		motorLeft.setDirection(DcMotor.Direction.REVERSE);
-		motorRight.setDirection(DcMotor.Direction.FORWARD);
+		motorRightRemote1 = hardwareMap.dcMotor.get("right");
+		motorLeftRemote1 = hardwareMap.dcMotor.get("left");
+		motorLeftRemote1.setDirection(DcMotor.Direction.REVERSE);
+		motorRightRemote1.setDirection(DcMotor.Direction.FORWARD);
+		hookWinchRightRemote2=hardwareMap.dcMotor.get("RightHook");
+		hookWinchLeftRemote2=hardwareMap.dcMotor.get("LeftHook");
+		telescopeExtendMotorRemote2=hardwareMap.dcMotor.get("TelescopePVC");
+		bucketServoRemote1=hardwareMap.servo.get("Bucket");
+		bucketArmServoRemote1=hardwareMap.servo.get("Arm");
+		telescopingPVCDropRightRemote2=hardwareMap.servo.get("PVCDropRight");
+		telescopingPVCDropLeftRemote2=hardwareMap.servo.get("PVCDropLeft");
+		firstLinkPVCExtendOrRetractRightRemote2=hardwareMap.servo.get("FirstLinkPVCExtendRight");
+		firstLinkPVCExtendOrRetractLeftRemote2=hardwareMap.servo.get("FirstLinkPVCExtendLeft");
 	}
 
 	/*
@@ -116,8 +134,8 @@ public class ProBotTeleOP extends OpMode {
 		left =  (float)scaleInput(left);
 		
 		// write the values to the motors
-		motorRight.setPower(right);
-		motorLeft.setPower(left);
+		motorRightRemote1.setPower(right);
+		motorLeftRemote1.setPower(left);
 		/*
 		 * Send telemetry data back to driver station. Note that if we are using
 		 * a legacy NXT-compatible motor controller, then the getPower() method
