@@ -38,7 +38,7 @@ public class HangingRobotTeleOp extends OpMode{
 
     @Override
     public void init() {
-        
+
         rightSideMotor = hardwareMap.dcMotor.get("rightSide");
         leftSideMotor = hardwareMap.dcMotor.get("leftSide");
         winchMotor = hardwareMap.dcMotor.get("winch");
