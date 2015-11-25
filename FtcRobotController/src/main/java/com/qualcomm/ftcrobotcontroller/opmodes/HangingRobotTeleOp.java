@@ -11,7 +11,7 @@ public class HangingRobotTeleOp extends OpMode{
     static final float pickup =0.255f;
     static final float holding =1f;
     static final float score =0.34f;
-    static final float dump =-0.17f;
+    static final float dump =0.10f;
     static final float pickuparm =1f;
     static final float holdingarm =1f;
     static final float scorearm =0f;
