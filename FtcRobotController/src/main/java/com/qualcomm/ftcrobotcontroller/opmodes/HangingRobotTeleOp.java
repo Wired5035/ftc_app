@@ -8,14 +8,14 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by Kota Baer on 11/17/2015.
  */
 public class HangingRobotTeleOp extends OpMode{
-    static final float pickup =0.50f;
+    static final float pickup =0.255f;
     static final float holding =1f;
-    static final float score =0.67f;
-    static final float dump =-0.33f;
+    static final float score =0.34f;
+    static final float dump =-0.17f;
     static final float pickuparm =1f;
     static final float holdingarm =1f;
-    static final float scorearm =-1f;
-    static final float dumparm =-1f;
+    static final float scorearm =0f;
+    static final float dumparm =0f;
     /*
     5 MOTORS FOR THE TWO SIDES
     rightSide is 2 motors powered as one
