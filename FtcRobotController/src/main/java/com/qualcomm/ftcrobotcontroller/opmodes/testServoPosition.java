@@ -5,31 +5,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
- * Created by Kota Baer on 11/17/2015.
+ * Created by Kota Baer on 11/29/2015.
  */
-public class HangingRobotTeleOp extends OpMode{
-    static final float pickup =0.255f;
-    static final float holding =1f;
-    static final float score =0.34f;
-    static final float dump =0.10f;
-    static final float pickuparm =1f;
-    static final float holdingarm =1f;
-    static final float scorearm =0f;
-    static final float dumparm =0f;
-    /*
-    5 MOTORS FOR THE TWO SIDES
-    rightSide is 2 motors powered as one
-    rightSide is 2 motors powered as one
-    winch is 2 motors
-    teleTubExtender(telescoping tub extender) is one motor
-    ////we need six servos:////
-    bucket arm
-    bucket
-    right tub drop
-    left tub drop
-    right tub crank
-    left tub crank
-     */
+
+
+public class testServoPosition extends OpMode {
+
     DcMotor motorRightRemote1;
     DcMotor motorLeftRemote1;
     DcMotor hookWinchRightRemote2;
@@ -43,7 +24,7 @@ public class HangingRobotTeleOp extends OpMode{
     Servo firstLinkPVCExtendOrRetractLeftRemote2;
     int pvcExtenderL;
     int pvcExtenderR;
-    float servoCenter = 0.525f;
+    float servoCenter = 0.53f;
 
     @Override
     public void init() {
@@ -69,20 +50,18 @@ public class HangingRobotTeleOp extends OpMode{
         telescopingPVCDropLeftRemote2.setPosition(1f);
         firstLinkPVCExtendOrRetractRightRemote2.setPosition(servoCenter);
         firstLinkPVCExtendOrRetractLeftRemote2.setPosition(servoCenter);
+
     }
 
     @Override
     public void loop() {
 
-        if(gamepad2.left_bumper)
-        {
-            telescopingPVCDropRightRemote2.setPosition(1);
-        }
-
-        if(gamepad2.right_bumper)
-        {
-            telescopingPVCDropLeftRemote2.setPosition(0);
-        }
+        telemetry.addData("bucket arm: ", bucketArmServoRemote1.getPosition());
+        telemetry.addData("bucket: ", bucketServoRemote1.getPosition());
+        telemetry.addData("pvcDropLeft: ", telescopingPVCDropLeftRemote2.getPosition());
+        telemetry.addData("pvcDropRight: ", telescopingPVCDropRightRemote2.getPosition());
+        telemetry.addData("PVCExtenderLeft: ", firstLinkPVCExtendOrRetractLeftRemote2.getPosition());
+        telemetry.addData("PVCExtenderRight: ", firstLinkPVCExtendOrRetractRightRemote2.getPosition());
 
         if(gamepad2.left_trigger > .75)
         {
@@ -101,56 +80,6 @@ public class HangingRobotTeleOp extends OpMode{
         {
             firstLinkPVCExtendOrRetractLeftRemote2.setPosition(servoCenter);
         }
-
-        if(gamepad1.b = true)
-        {
-            bucketArmServoRemote1.setPosition(pickuparm);
-            bucketServoRemote1.setPosition(pickup);
-        }
-
-        if(gamepad1.y = true)
-        {
-            //pizza = yummy
-            bucketArmServoRemote1.setPosition(holdingarm);
-            bucketServoRemote1.setPosition(holding);
-        }
-
-        if(gamepad1.a = true)
-        {
-            //popcorn = YAY!
-            bucketArmServoRemote1.setPosition(dumparm);
-            bucketServoRemote1.setPosition(dump);
-        }
-
-        if(gamepad1.x = true)
-        {
-            //Ben = Cool!
-            bucketArmServoRemote1.setPosition(scorearm);
-            bucketServoRemote1.setPosition(score);
-        }
-
-        if(gamepad2.x = true)
-        {
-            hookWinchRightRemote2.setPower(gamepad2.left_stick_y * 0.90f);
-        }
-        else
-        {
-            hookWinchRightRemote2.setPower(gamepad2.left_stick_y);
-        }
-
-        if(gamepad2.b = true)
-        {
-            hookWinchLeftRemote2.setPower(gamepad2.left_stick_y * 0.90f);
-        }
-        else
-        {
-            hookWinchLeftRemote2.setPower(gamepad2.left_stick_y);
-        }
-
-        telescopeExtendMotorRemote2.setPower(gamepad2.right_stick_y);
-
-        motorLeftRemote1.setPower(gamepad1.left_stick_y);
-        motorRightRemote1.setPower(gamepad1.right_stick_y);
 
     }
 }
