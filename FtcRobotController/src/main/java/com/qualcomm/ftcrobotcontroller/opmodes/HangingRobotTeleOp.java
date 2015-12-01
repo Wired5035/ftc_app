@@ -44,6 +44,9 @@ public class HangingRobotTeleOp extends OpMode{
     float pvcExtenderL = 0.550f;
     float pvcExtenderR = 0.5f;
     float servoCenter = 0.525f;
+    private boolean triggerflag;
+    private float servoLeftTension=.4;
+    private float servoRightTension=.6;
 
     @Override
     public void init() {
@@ -86,6 +89,8 @@ public class HangingRobotTeleOp extends OpMode{
 
         if(gamepad2.left_trigger > .50)
         {
+            triggerflag=true;
+
             if(gamepad2.a)
             {
                 firstLinkPVCExtendOrRetractRightRemote2.setPosition((gamepad2.left_trigger * 2 - 1) * (0 - servoCenter) + servoCenter);
@@ -95,11 +100,20 @@ public class HangingRobotTeleOp extends OpMode{
         }
         else if(gamepad2.left_trigger < .15)
         {
-            firstLinkPVCExtendOrRetractRightRemote2.setPosition(servoCenter);
+            if (triggerflag)
+            {
+                firstLinkPVCExtendOrRetractRightRemote2.setPosition(servoRightTension);
+            }
+            else
+            {
+                firstLinkPVCExtendOrRetractRightRemote2.setPosition(servoCenter);
+            }
+
         }
 
         if(gamepad2.right_trigger > .50)
         {
+            triggerflag=true;
             if(gamepad2.a)
             {
                 firstLinkPVCExtendOrRetractLeftRemote2.setPosition((gamepad2.right_trigger * 2 - 1) * (1 - servoCenter) + servoCenter);
@@ -112,7 +126,14 @@ public class HangingRobotTeleOp extends OpMode{
         }
         else if(gamepad2.right_trigger < .15)
         {
-            firstLinkPVCExtendOrRetractLeftRemote2.setPosition(servoCenter);
+            if (triggerflag)
+            {
+                firstLinkPVCExtendOrRetractLeftRemote2.setPosition(servoLeftTension);
+            }
+            else
+            {
+                firstLinkPVCExtendOrRetractLeftRemote2.setPosition(servoCenter);
+            }
         }
 
         if(gamepad1.b = true)
