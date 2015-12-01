@@ -41,8 +41,8 @@ public class HangingRobotTeleOp extends OpMode{
     Servo telescopingPVCDropLeftRemote2;
     Servo firstLinkPVCExtendOrRetractRightRemote2;
     Servo firstLinkPVCExtendOrRetractLeftRemote2;
-    int pvcExtenderL;
-    int pvcExtenderR;
+    float pvcExtenderL = 0.550f;
+    float pvcExtenderR = 0.5f;
     float servoCenter = 0.525f;
 
     @Override
@@ -84,18 +84,31 @@ public class HangingRobotTeleOp extends OpMode{
             telescopingPVCDropLeftRemote2.setPosition(0);
         }
 
-        if(gamepad2.left_trigger > .75)
+        if(gamepad2.left_trigger > .50)
         {
-            firstLinkPVCExtendOrRetractRightRemote2.setPosition(pvcExtenderR += .1);
+            if(gamepad2.a)
+            {
+                firstLinkPVCExtendOrRetractRightRemote2.setPosition((gamepad2.left_trigger * 2 - 1) * (0 - servoCenter) + servoCenter);
+            } else {
+                firstLinkPVCExtendOrRetractRightRemote2.setPosition((gamepad2.left_trigger * 2 - 1) * (1 - servoCenter) + servoCenter);
+            }
         }
         else if(gamepad2.left_trigger < .15)
         {
             firstLinkPVCExtendOrRetractRightRemote2.setPosition(servoCenter);
         }
 
-        if(gamepad2.right_trigger > .75)
+        if(gamepad2.right_trigger > .50)
         {
-            firstLinkPVCExtendOrRetractLeftRemote2.setPosition(pvcExtenderL += .1);
+            if(gamepad2.a)
+            {
+                firstLinkPVCExtendOrRetractLeftRemote2.setPosition((gamepad2.right_trigger * 2 - 1) * (1 - servoCenter) + servoCenter);
+            } else {
+                firstLinkPVCExtendOrRetractLeftRemote2.setPosition((gamepad2.right_trigger * 2 - 1) * (0 - servoCenter) + servoCenter);
+            /*((gamepad2.right_trigger * 2 - 1) * (0 - servoCenter) + servoCenter)
+            * (([amount that the button is pressed] * 2 - 1) * ([min] - [max]) + [max])
+            */
+            }
         }
         else if(gamepad2.right_trigger < .15)
         {
