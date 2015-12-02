@@ -24,7 +24,9 @@ public class testServoPosition extends OpMode {
     Servo firstLinkPVCExtendOrRetractLeftRemote2;
     int pvcExtenderL;
     int pvcExtenderR;
+    int slectedServo;
     float servoCenter = 0.53f;
+    boolean yDownLastLoop;
 
     @Override
     public void init() {
@@ -62,6 +64,35 @@ public class testServoPosition extends OpMode {
         telemetry.addData("pvcDropRight: ", telescopingPVCDropRightRemote2.getPosition());
         telemetry.addData("PVCExtenderLeft: ", firstLinkPVCExtendOrRetractLeftRemote2.getPosition());
         telemetry.addData("PVCExtenderRight: ", firstLinkPVCExtendOrRetractRightRemote2.getPosition());
+        telemetry.addData("Selected Servo: ", slectedServo);
+
+
+        Servo currentServo = null;
+        switch(slectedServo)
+        {
+            case 0:
+                currentServo = bucketArmServoRemote1;
+                break;
+            case 1:
+                currentServo = bucketServoRemote1;
+                break;
+        }
+
+        if (gamepad1.y && !yDownLastLoop)
+        {
+            switch (slectedServo)
+            {
+                case 0:
+                    slectedServo = 1;
+                    break;
+                case 1:
+                    slectedServo = 0;
+                    break;
+                case 2:
+                    slectedServo = 0;
+                break;
+            }
+        }
 
         if(gamepad2.left_trigger > .75)
         {
@@ -81,5 +112,12 @@ public class testServoPosition extends OpMode {
             firstLinkPVCExtendOrRetractLeftRemote2.setPosition(servoCenter);
         }
 
+        if(gamepad1.a)
+        {
+            currentServo.setPosition((gamepad1.left_stick_y + 1) / 2);
+        }
+
+        telemetry.addData("Current servo position: ", currentServo.getPosition());
+        yDownLastLoop = gamepad1.y;
     }
 }

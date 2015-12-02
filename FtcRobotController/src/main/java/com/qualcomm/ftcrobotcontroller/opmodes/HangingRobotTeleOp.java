@@ -45,8 +45,8 @@ public class HangingRobotTeleOp extends OpMode{
     float pvcExtenderR = 0.5f;
     float servoCenter = 0.525f;
     private boolean triggerflag;
-    private float servoLeftTension=.4;
-    private float servoRightTension=.6;
+    private float servoLeftTension=.03f;
+    private float servoRightTension=.06f;
 
     @Override
     public void init() {
@@ -66,7 +66,7 @@ public class HangingRobotTeleOp extends OpMode{
         firstLinkPVCExtendOrRetractRightRemote2=hardwareMap.servo.get("ServoExtenderRight");
         firstLinkPVCExtendOrRetractLeftRemote2=hardwareMap.servo.get("ServoExtenderLeft");
 
-        bucketServoRemote1.setPosition(0f);
+        bucketServoRemote1.setPosition(0.75f);
         bucketArmServoRemote1.setPosition(1f);
         telescopingPVCDropRightRemote2.setPosition(0f);
         telescopingPVCDropLeftRemote2.setPosition(1f);
@@ -89,7 +89,7 @@ public class HangingRobotTeleOp extends OpMode{
 
         if(gamepad2.left_trigger > .50)
         {
-            triggerflag=true;
+            //triggerflag=true;
 
             if(gamepad2.a)
             {
@@ -113,7 +113,7 @@ public class HangingRobotTeleOp extends OpMode{
 
         if(gamepad2.right_trigger > .50)
         {
-            triggerflag=true;
+            //triggerflag=true;
             if(gamepad2.a)
             {
                 firstLinkPVCExtendOrRetractLeftRemote2.setPosition((gamepad2.right_trigger * 2 - 1) * (1 - servoCenter) + servoCenter);
