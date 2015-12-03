@@ -77,15 +77,11 @@ public class HangingRobotTeleOp extends OpMode{
     @Override
     public void loop() {
 
-        if(gamepad2.left_bumper)
+        if(gamepad2.left_bumper && gamepad2.right_bumper)
         {
-            telescopingPVCDropRightRemote2.setPosition(1);
+            telescopingPVCDropRightRemote2.setPosition(1); telescopingPVCDropLeftRemote2.setPosition(0);
         }
-
-        if(gamepad2.right_bumper)
-        {
-            telescopingPVCDropLeftRemote2.setPosition(0);
-        }
+        
 
         if(gamepad2.left_trigger > .50)
         {
