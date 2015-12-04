@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by Kota Baer on 11/17/2015.
  */
 public class HangingRobotTeleOp extends OpMode{
-    static final float pickup =0.255f;
+    static final float pickup =0.847f;
     static final float holding =1f;
     static final float score =0.34f;
     static final float dump =0.10f;
@@ -66,8 +66,19 @@ public class HangingRobotTeleOp extends OpMode{
         firstLinkPVCExtendOrRetractRightRemote2=hardwareMap.servo.get("ServoExtenderRight");
         firstLinkPVCExtendOrRetractLeftRemote2=hardwareMap.servo.get("ServoExtenderLeft");
 
-        bucketServoRemote1.setPosition(0.75f);
-        bucketArmServoRemote1.setPosition(1f);
+        bucketServoRemote1.setPosition(pickup);
+        bucketArmServoRemote1.setPosition(pickuparm);
+        telescopingPVCDropRightRemote2.setPosition(0f);
+        telescopingPVCDropLeftRemote2.setPosition(1f);
+        firstLinkPVCExtendOrRetractRightRemote2.setPosition(servoCenter);
+        firstLinkPVCExtendOrRetractLeftRemote2.setPosition(servoCenter);
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        bucketServoRemote1.setPosition(pickup);
+        bucketArmServoRemote1.setPosition(pickuparm);
         telescopingPVCDropRightRemote2.setPosition(0f);
         telescopingPVCDropLeftRemote2.setPosition(1f);
         firstLinkPVCExtendOrRetractRightRemote2.setPosition(servoCenter);
@@ -77,9 +88,12 @@ public class HangingRobotTeleOp extends OpMode{
     @Override
     public void loop() {
 
+
+
         if(gamepad2.left_bumper && gamepad2.right_bumper)
         {
-            telescopingPVCDropRightRemote2.setPosition(1); telescopingPVCDropLeftRemote2.setPosition(0);
+            telescopingPVCDropRightRemote2.setPosition(1);
+            telescopingPVCDropLeftRemote2.setPosition(0);
         }
         
 
@@ -132,55 +146,75 @@ public class HangingRobotTeleOp extends OpMode{
             }
         }
 
-        if(gamepad1.b = true)
+        if(gamepad1.guide || true)
+        {
+            telemetry.addData("Text", "*** Robot Data***");
+            telemetry.addData("arm", "arm:  " + String.format("%.2f", bucketArmServoRemote1.getPosition()));
+            telemetry.addData("claw", "claw:  " + String.format("%.2f", bucketServoRemote1.getPosition()));
+        }
+
+        if(gamepad1.b)
         {
             bucketArmServoRemote1.setPosition(pickuparm);
             bucketServoRemote1.setPosition(pickup);
         }
 
-        if(gamepad1.y = true)
+        if(gamepad1.y)
         {
             //pizza = yummy
             bucketArmServoRemote1.setPosition(holdingarm);
             bucketServoRemote1.setPosition(holding);
         }
 
-        if(gamepad1.a = true)
+        if(gamepad1.a)
         {
             //popcorn = YAY!
             bucketArmServoRemote1.setPosition(dumparm);
             bucketServoRemote1.setPosition(dump);
         }
 
-        if(gamepad1.x = true)
+        if(gamepad1.x)
         {
             //Ben = Cool!
             bucketArmServoRemote1.setPosition(scorearm);
             bucketServoRemote1.setPosition(score);
         }
 
-        if(gamepad2.x = true)
-        {
-            hookWinchRightRemote2.setPower(gamepad2.left_stick_y * 0.90f);
-        }
-        else
+        if(gamepad2.left_stick_y < -0.25)
         {
             hookWinchRightRemote2.setPower(gamepad2.left_stick_y);
         }
-
-        if(gamepad2.b = true)
+        else
         {
-            hookWinchLeftRemote2.setPower(gamepad2.left_stick_y * 0.90f);
+            hookWinchRightRemote2.setPower(0);
+        }
+
+        if(gamepad2.right_stick_y < -0.25)
+        {
+            hookWinchLeftRemote2.setPower(gamepad2.right_stick_y);
         }
         else
         {
-            hookWinchLeftRemote2.setPower(gamepad2.left_stick_y);
+            hookWinchLeftRemote2.setPower(0);
         }
 
-        telescopeExtendMotorRemote2.setPower(gamepad2.right_stick_y);
+        if (gamepad2.dpad_up)
+        {
+            telemetry.addData("telescopeExtend", 1);
+            telescopeExtendMotorRemote2.setPower(1);
+        }
+        else if (gamepad2.dpad_down)
+        {
+            telemetry.addData("telescopeExtend", -1);
+            telescopeExtendMotorRemote2.setPower(-1);
+        }
+        else
+        {
+            telemetry.addData("telescopeExtend", 0);
+            telescopeExtendMotorRemote2.setPower(0);
+        }
 
         motorLeftRemote1.setPower(gamepad1.left_stick_y);
         motorRightRemote1.setPower(gamepad1.right_stick_y);
-
     }
 }
