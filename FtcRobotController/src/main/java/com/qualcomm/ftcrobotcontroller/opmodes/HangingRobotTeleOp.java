@@ -8,10 +8,12 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by Kota Baer on 11/17/2015.
  */
 public class HangingRobotTeleOp extends OpMode{
-    static final float pickup =0.847f;
+    //Bucket Positions
+    static final float pickup =0.847f;    //for picking up game
     static final float holding =1f;
-    static final float score =0.34f;
-    static final float dump =0.10f;
+    static final float score =0.34f;  //getting ready to score
+    static final float dump =0.10f;   //dumping
+    //Arm Positions
     static final float pickuparm =1f;
     static final float holdingarm =1f;
     static final float scorearm =0f;
@@ -30,20 +32,23 @@ public class HangingRobotTeleOp extends OpMode{
     right tub crank
     left tub crank
      */
+    //Motors
     DcMotor motorRightRemote1;
     DcMotor motorLeftRemote1;
     DcMotor hookWinchRightRemote2;
     DcMotor hookWinchLeftRemote2;
     DcMotor telescopeExtendMotorRemote2;
+    //Servos
     Servo bucketServoRemote1;
     Servo bucketArmServoRemote1;
     Servo telescopingPVCDropRightRemote2;
     Servo telescopingPVCDropLeftRemote2;
     Servo firstLinkPVCExtendOrRetractRightRemote2;
     Servo firstLinkPVCExtendOrRetractLeftRemote2;
+    //Positions for servos to be set to
     float pvcExtenderL = 0.550f;
     float pvcExtenderR = 0.5f;
-    float servoCenter = 0.525f;
+    float servoCenter = 0.525f;  //for continues rotation servos to stop them from spinning
     private boolean triggerflag;
     private float servoLeftTension=.03f;
     private float servoRightTension=.06f;
@@ -51,11 +56,12 @@ public class HangingRobotTeleOp extends OpMode{
     @Override
     public void init() {
 
-        motorRightRemote1 = hardwareMap.dcMotor.get("right");
-        motorLeftRemote1 = hardwareMap.dcMotor.get("left");
+        //setup all Motors and servos for config file on phone
+        motorRightRemote1 = hardwareMap.dcMotor.get("right");  //FORWARD
+        motorLeftRemote1 = hardwareMap.dcMotor.get("left");  //REVERSED
         motorLeftRemote1.setDirection(DcMotor.Direction.REVERSE);
         motorRightRemote1.setDirection(DcMotor.Direction.FORWARD);
-        hookWinchRightRemote2=hardwareMap.dcMotor.get("RightHook");
+        hookWinchRightRemote2=hardwareMap.dcMotor.get("RightHook");  //REVERSED
         hookWinchLeftRemote2=hardwareMap.dcMotor.get("LeftHook");
         hookWinchRightRemote2.setDirection(DcMotor.Direction.REVERSE);
         telescopeExtendMotorRemote2=hardwareMap.dcMotor.get("TelescopePVC");
@@ -66,6 +72,7 @@ public class HangingRobotTeleOp extends OpMode{
         firstLinkPVCExtendOrRetractRightRemote2=hardwareMap.servo.get("ServoExtenderRight");
         firstLinkPVCExtendOrRetractLeftRemote2=hardwareMap.servo.get("ServoExtenderLeft");
 
+        //initialise servo positions
         bucketServoRemote1.setPosition(pickup);
         bucketArmServoRemote1.setPosition(pickuparm);
         telescopingPVCDropRightRemote2.setPosition(0f);
@@ -77,6 +84,7 @@ public class HangingRobotTeleOp extends OpMode{
     @Override
     public void start() {
         super.start();
+        //initialise servo positions on start
         bucketServoRemote1.setPosition(pickup);
         bucketArmServoRemote1.setPosition(pickuparm);
         telescopingPVCDropRightRemote2.setPosition(0f);
@@ -92,19 +100,23 @@ public class HangingRobotTeleOp extends OpMode{
 
         if(gamepad2.left_bumper && gamepad2.right_bumper)
         {
+            //Drop The hooks
             telescopingPVCDropRightRemote2.setPosition(1);
             telescopingPVCDropLeftRemote2.setPosition(0);
         }
         
 
-        if(gamepad2.left_trigger > .50)
+        if(gamepad2.left_trigger > .50) //continues rotation servos
         {
             //triggerflag=true;
 
             if(gamepad2.a)
             {
+                //using math to make a larger range of motion control
                 firstLinkPVCExtendOrRetractRightRemote2.setPosition((gamepad2.left_trigger * 2 - 1) * (0 - servoCenter) + servoCenter);
-            } else {
+            }
+            else
+            {
                 firstLinkPVCExtendOrRetractRightRemote2.setPosition((gamepad2.left_trigger * 2 - 1) * (1 - servoCenter) + servoCenter);
             }
         }
@@ -148,6 +160,7 @@ public class HangingRobotTeleOp extends OpMode{
 
         if(gamepad1.guide || true)
         {
+            //telemetry data output to the phone
             telemetry.addData("Text", "*** Robot Data***");
             telemetry.addData("arm", "arm:  " + String.format("%.2f", bucketArmServoRemote1.getPosition()));
             telemetry.addData("claw", "claw:  " + String.format("%.2f", bucketServoRemote1.getPosition()));
@@ -214,6 +227,7 @@ public class HangingRobotTeleOp extends OpMode{
             telescopeExtendMotorRemote2.setPower(0);
         }
 
+        //TANK DRIVE
         motorLeftRemote1.setPower(gamepad1.left_stick_y);
         motorRightRemote1.setPower(gamepad1.right_stick_y);
     }
