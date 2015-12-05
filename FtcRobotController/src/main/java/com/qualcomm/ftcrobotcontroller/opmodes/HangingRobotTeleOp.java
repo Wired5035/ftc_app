@@ -18,8 +18,6 @@ public class HangingRobotTeleOp extends OpMode{
     static final float holdingarm =1f;
     static final float scorearm =0f;
     static final float dumparm =0f;
-
-    boolean tankF; //to change the drive direction
     /*
     5 MOTORS FOR THE TWO SIDES
     rightSide is 2 motors powered as one
@@ -81,8 +79,6 @@ public class HangingRobotTeleOp extends OpMode{
         telescopingPVCDropLeftRemote2.setPosition(1f);
         firstLinkPVCExtendOrRetractRightRemote2.setPosition(servoCenter);
         firstLinkPVCExtendOrRetractLeftRemote2.setPosition(servoCenter);
-        //initialise tank drive to forward
-        tankF = true;
     }
 
     @Override
@@ -231,30 +227,8 @@ public class HangingRobotTeleOp extends OpMode{
             telescopeExtendMotorRemote2.setPower(0);
         }
 
-        //changes the drive mode based on the Dpad
-        if(gamepad1.dpad_up)// UP = FORWARD
-        {
-            tankF = true;
-            telemetry.addData("TankDive: ", "FORWARD");
-        }
-        else if(gamepad1.dpad_down)// DOWN = REVERSED
-        {
-            tankF = false;
-            telemetry.addData("TankDrive: ", "REVERSED");
-        }
-
         //TANK DRIVE
-        if(tankF)//CHANGES OUR DIRECTION BASED ON IF "tankF" IS TRUE OR FALSE
-        {
-            //forward tank drive
-            motorLeftRemote1.setPower(gamepad1.left_stick_y);
-            motorRightRemote1.setPower(gamepad1.right_stick_y);
-        }
-        else if(!tankF)
-        {
-            //backward tank drive
-            motorLeftRemote1.setPower(-gamepad1.left_stick_y);
-            motorRightRemote1.setPower(-gamepad1.right_stick_y);
-        }
+        motorLeftRemote1.setPower(gamepad1.left_stick_y);
+        motorRightRemote1.setPower(gamepad1.right_stick_y);
     }
 }
