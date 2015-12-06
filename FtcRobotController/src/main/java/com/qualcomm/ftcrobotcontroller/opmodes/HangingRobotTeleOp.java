@@ -4,15 +4,17 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import java.util.Timer;
+
 /**
  * Created by Kota Baer on 11/17/2015.
  */
 public class HangingRobotTeleOp extends OpMode{
     //Bucket Positions
-    static final float pickup =0.847f;    //for picking up game
-    static final float holding =1f;
-    static final float score =0.34f;  //getting ready to score
-    static final float dump =0.10f;   //dumping
+    static final float pickup = 1f;    //for picking up game
+    static final float holding = 1f;
+    static final float score = 0.34f;  //getting ready to score
+    static final float dump = 0f;   //dumping
     //Arm Positions
     static final float pickuparm =1f;
     static final float holdingarm =1f;
@@ -20,6 +22,9 @@ public class HangingRobotTeleOp extends OpMode{
     static final float dumparm =0f;
 
     boolean tankF; //to change the drive direction
+    boolean slowD;
+    float CurrentArmPosition = 1;
+    double lastLoopTime;
     /*
     5 MOTORS FOR THE TWO SIDES
     rightSide is 2 motors powered as one
@@ -76,33 +81,44 @@ public class HangingRobotTeleOp extends OpMode{
 
         //initialise servo positions
         bucketServoRemote1.setPosition(pickup);
-        bucketArmServoRemote1.setPosition(pickuparm);
+        bucketArmServoRemote1.setPosition(CurrentArmPosition);
         telescopingPVCDropRightRemote2.setPosition(0f);
         telescopingPVCDropLeftRemote2.setPosition(1f);
         firstLinkPVCExtendOrRetractRightRemote2.setPosition(servoCenter);
         firstLinkPVCExtendOrRetractLeftRemote2.setPosition(servoCenter);
         //initialise tank drive to forward
         tankF = true;
+        //boolean slowD = false; // slow drive set to off
     }
 
     @Override
     public void start() {
         super.start();
         //initialise servo positions on start
-        bucketServoRemote1.setPosition(pickup);
-        bucketArmServoRemote1.setPosition(pickuparm);
+        bucketServoRemote1.setPosition(1);
+        bucketArmServoRemote1.setPosition(1);
         telescopingPVCDropRightRemote2.setPosition(0f);
         telescopingPVCDropLeftRemote2.setPosition(1f);
         firstLinkPVCExtendOrRetractRightRemote2.setPosition(servoCenter);
         firstLinkPVCExtendOrRetractLeftRemote2.setPosition(servoCenter);
+        boolean slowD = false;
     }
 
     @Override
     public void loop() {
 
+        double deltaTime = time - lastLoopTime;
 
+        if(gamepad1.dpad_left)
+        {
+            slowD = false;
+        }
+        else if(gamepad1.dpad_right)
+        {
+            slowD = true;
+        }
 
-        if(gamepad2.left_bumper && gamepad2.right_bumper)
+        if(gamepad2.left_bumper && gamepad2.right_bumper && gamepad2.guide)
         {
             //Drop The hooks
             telescopingPVCDropRightRemote2.setPosition(1);
@@ -172,29 +188,26 @@ public class HangingRobotTeleOp extends OpMode{
 
         if(gamepad1.b)
         {
-            bucketArmServoRemote1.setPosition(pickuparm);
-            bucketServoRemote1.setPosition(pickup);
+            tankF = false;
+            telemetry.addData("TankDive: ", "REVERSE");
         }
 
         if(gamepad1.y)
         {
-            //pizza = yummy
-            bucketArmServoRemote1.setPosition(holdingarm);
-            bucketServoRemote1.setPosition(holding);
+            bucketServoRemote1.setPosition(dump);
         }
 
         if(gamepad1.a)
         {
-            //popcorn = YAY!
-            bucketArmServoRemote1.setPosition(dumparm);
-            bucketServoRemote1.setPosition(dump);
+            //popcorn = YAY!!!!!!!!!!
+            bucketServoRemote1.setPosition(pickup);
         }
 
         if(gamepad1.x)
         {
             //Ben = Cool!
-            bucketArmServoRemote1.setPosition(scorearm);
-            bucketServoRemote1.setPosition(score);
+            tankF = true;
+            telemetry.addData("TankDive: ", "FORWARD");
         }
 
         if(gamepad2.left_stick_y < -0.25)
@@ -231,31 +244,56 @@ public class HangingRobotTeleOp extends OpMode{
             telescopeExtendMotorRemote2.setPower(0);
         }
 
-        //changes the drive mode based on the Dpad
-        if(gamepad1.dpad_up)// UP = FORWARD
+        if(gamepad1.dpad_up)
         {
-            tankF = true;
-            telemetry.addData("TankDive: ", "FORWARD");
+            CurrentArmPosition -= lastLoopTime * 0.5;
+            if(CurrentArmPosition < 0)
+            {
+                CurrentArmPosition = 0;
+            }
         }
-        else if(gamepad1.dpad_down)// DOWN = REVERSED
+        else if(gamepad1.dpad_down)
         {
-            tankF = false;
-            telemetry.addData("TankDrive: ", "REVERSED");
+            CurrentArmPosition += lastLoopTime * 0.5;
+            if(CurrentArmPosition > 1)
+            {
+                CurrentArmPosition = 1;
+            }
         }
+        bucketArmServoRemote1.setPosition(CurrentArmPosition);
 
         //TANK DRIVE
         if(tankF)//CHANGES OUR DIRECTION BASED ON IF "tankF" IS TRUE OR FALSE
         {
-            //forward tank drive
-            motorLeftRemote1.setPower(gamepad1.left_stick_y);
-            motorRightRemote1.setPower(gamepad1.right_stick_y);
+            if(slowD) //CHANGES OUR SPEED BASED ON "slowD"
+            {
+                //forward tank drive
+                motorLeftRemote1.setPower(gamepad1.left_stick_y / 2);
+                motorRightRemote1.setPower(gamepad1.right_stick_y / 2);
+            }
+            else
+            {
+                //forward tank drive
+                motorLeftRemote1.setPower(gamepad1.left_stick_y);
+                motorRightRemote1.setPower(gamepad1.right_stick_y);
+            }
         }
         else if(!tankF)
         {
-            //backward tank drive
-            motorLeftRemote1.setPower(-gamepad1.left_stick_y);
-            motorRightRemote1.setPower(-gamepad1.right_stick_y);
+            if(slowD)//CHANGES OUR SPEED BASED ON "slowD"
+            {
+                //backward tank drive
+                motorLeftRemote1.setPower(-gamepad1.right_stick_y / 2);
+                motorRightRemote1.setPower(-gamepad1.left_stick_y / 2);
+            }
+            else
+            {
+                //backward tank drive
+                motorLeftRemote1.setPower(-gamepad1.right_stick_y);
+                motorRightRemote1.setPower(-gamepad1.left_stick_y);
+            }
         }
         //THE END
+        lastLoopTime = time;
     }
 }
