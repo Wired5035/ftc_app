@@ -194,13 +194,21 @@ public class HangingRobotTeleOp extends OpMode{
 
         if(gamepad1.y)
         {
-            bucketServoRemote1.setPosition(dump);
+            CurrentArmPosition -= lastLoopTime * 0.5;
+            if(CurrentArmPosition < 0)
+            {
+                CurrentArmPosition = 0;
+            }
         }
 
         if(gamepad1.a)
         {
             //popcorn = YAY!!!!!!!!!!
-            bucketServoRemote1.setPosition(pickup);
+            CurrentArmPosition += lastLoopTime * 0.5;
+            if(CurrentArmPosition > 1)
+            {
+                CurrentArmPosition = 1;
+            }
         }
 
         if(gamepad1.x)
@@ -246,19 +254,11 @@ public class HangingRobotTeleOp extends OpMode{
 
         if(gamepad1.dpad_up)
         {
-            CurrentArmPosition -= lastLoopTime * 0.5;
-            if(CurrentArmPosition < 0)
-            {
-                CurrentArmPosition = 0;
-            }
+            bucketServoRemote1.setPosition(dump);
         }
         else if(gamepad1.dpad_down)
         {
-            CurrentArmPosition += lastLoopTime * 0.5;
-            if(CurrentArmPosition > 1)
-            {
-                CurrentArmPosition = 1;
-            }
+            bucketServoRemote1.setPosition(pickup);
         }
         bucketArmServoRemote1.setPosition(CurrentArmPosition);
 
