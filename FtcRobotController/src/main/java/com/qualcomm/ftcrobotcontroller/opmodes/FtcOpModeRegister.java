@@ -64,7 +64,9 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register ("PushBotManual", PushBotManual.class);
     manager.register ("HangBotPro", HangingRobotTeleOp.class);
     manager.register("TestPosition", testServoPosition.class);
-    manager.register("AutoDropOff",AutoDropOff.class);
+    //manager.register("AutoDropOff",AutoDropOff.class);
+    manager.register("AutoDropOffBlue",AutoDropOffBlue.class);
+    manager.register("AutoDropOffRed",AutoDropOffRed.class);
     //manager.register("Team10618", Team10618.class);
 
 

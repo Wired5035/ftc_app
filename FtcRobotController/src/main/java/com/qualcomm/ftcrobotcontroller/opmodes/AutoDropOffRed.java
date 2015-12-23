@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * Created by Kota Baer on 12/15/2015.
  */
-public class AutoDropOff extends LinearOpMode {
+public class AutoDropOffRed extends LinearOpMode {
 
     //Variables section:
     int timeLeft = 10;
