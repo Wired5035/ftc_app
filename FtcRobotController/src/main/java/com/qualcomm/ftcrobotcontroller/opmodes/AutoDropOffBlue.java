@@ -1,7 +1,6 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
         import android.os.CountDownTimer;
-
         import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
         import com.qualcomm.robotcore.eventloop.opmode.OpMode;
         import com.qualcomm.robotcore.util.ElapsedTime;
@@ -94,11 +93,11 @@ public class AutoDropOffBlue extends LinearOpMode {
         waitForStart(); //wait for start
 
 
-        motorLeftRemote1.setTargetPosition(10000);
-        motorRightRemote1.setTargetPosition(100);
+        motorLeftRemote1.setTargetPosition(25);
+        motorRightRemote1.setTargetPosition(25);
         motorLeftRemote1.setPower(.75);
         motorRightRemote1.setPower(.75);
-        
+
         telemetry.addData("CountUp", ((float) CountingUp.time()));
         sleep(2000);
         CountingUp.reset();
