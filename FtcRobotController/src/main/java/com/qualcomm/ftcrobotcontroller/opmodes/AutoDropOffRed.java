@@ -9,24 +9,24 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * Created by Kota Baer on 12/15/2015.
  */
-public class AutoDropOffRed extends LinearOpMode {
+public class AutoDropOffRed extends AutoHangBot {
 
     //Variables section:
-    int timeLeft = 10;
-    ElapsedTime CountingUp = new ElapsedTime();
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {
+        super.runOpMode();
 
-        CountingUp.reset();
-        telemetry.addData("Status: ", "WAITING.....");
         waitForStart();
-        telemetry.addData("CountUp", ((float) CountingUp.time()));
-        sleep(2000);
-        CountingUp.reset();
-        telemetry.addData("Status: ", "STARTING.....");
-        telemetry.addData("CountUp", ((int) CountingUp.time()));
-        telemetry.addData("TimeLeft: ", timeLeft);
-        sleep(1000);
+        setDrivePower(.8);
+        while (lightR.getLightDetected()<.45)
+        {
+            waitOneFullHardwareCycle();
+        }
+        setDrivePower(0);
+        turnLeft90Degrees (
+        );
     }
 }
