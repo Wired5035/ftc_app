@@ -13,7 +13,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 /**
  * Created by Kota Baer on 12/15/2015.
  */
-public class AutoDropOffBlue extends LinearOpMode {
+public class AutoDropOffBlue extends AutoHangBot {
 
     //Variables section:
     int timeLeft = 10;
@@ -61,42 +61,10 @@ public class AutoDropOffBlue extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
-        //setup all Motors and servos for config file on phone
-        motorRightRemote1 = hardwareMap.dcMotor.get("right");  //FORWARD
-        motorLeftRemote1 = hardwareMap.dcMotor.get("left");  //REVERSED
-        motorLeftRemote1.setDirection(DcMotor.Direction.REVERSE);
-        motorRightRemote1.setDirection(DcMotor.Direction.FORWARD);
-        motorLeftRemote1.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        motorRightRemote1.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        hookWinchRightRemote2=hardwareMap.dcMotor.get("RightHook");  //REVERSED
-        hookWinchLeftRemote2=hardwareMap.dcMotor.get("LeftHook");
-        hookWinchRightRemote2.setDirection(DcMotor.Direction.REVERSE);
-        telescopeExtendMotorRemote2=hardwareMap.dcMotor.get("TelescopePVC");
-        bucketServoRemote1=hardwareMap.servo.get("Bucket");
-        bucketArmServoRemote1=hardwareMap.servo.get("Arm");
-        telescopingPVCDropRightRemote2=hardwareMap.servo.get("PVCDropRight");
-        telescopingPVCDropLeftRemote2=hardwareMap.servo.get("PVCDropLeft");
-        firstLinkPVCExtendOrRetractRightRemote2=hardwareMap.servo.get("ServoExtenderRight");
-        firstLinkPVCExtendOrRetractLeftRemote2=hardwareMap.servo.get("ServoExtenderLeft");
-        lightL = hardwareMap.lightSensor.get("lightL");
-        lightR = hardwareMap.lightSensor.get("lightR");
-        motorLeftRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        motorRightRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-
-        CountingUp.reset();
-        telemetry.addData("Status: ", "WAITING.....");
-        motorLeftRemote1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRightRemote1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-
-
+        super.runOpMode();
         waitForStart(); //wait for start
 
 
-        motorLeftRemote1.setTargetPosition(25);
-        motorRightRemote1.setTargetPosition(25);
-        motorLeftRemote1.setPower(.75);
-        motorRightRemote1.setPower(.75);
 
         telemetry.addData("CountUp", ((float) CountingUp.time()));
         sleep(2000);
