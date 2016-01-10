@@ -44,6 +44,7 @@ public class AutoHangBot extends LinearOpMode {
 
 
 
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -84,6 +85,13 @@ public class AutoHangBot extends LinearOpMode {
         motorRightRemote1.setPower(power);
         motorLeftRemote1.setPower(power);
     }
+
+    public int getTicksForTurn (double degrees)
+    {
+        int ticks = (int)(14 * Math.abs(degrees));
+        return ticks;
+    }
+
     public void turnLeft90Degrees () throws InterruptedException {
         motorRightRemote1.setPower(1);
         motorLeftRemote1.setPower(-1);
@@ -95,6 +103,46 @@ public class AutoHangBot extends LinearOpMode {
             encoderTicsTraveled=motorRightRemote1.getCurrentPosition()-startingRightEncoder+startingLeftEncoder-motorLeftRemote1.getCurrentPosition();
 
         }
+        setDrivePower(0);
+    }
+
+    public void turnDegrees (double degrees) throws InterruptedException {
+        int basePowerL = 0;
+        int basePowerR = 0;
+        if (degrees < 0)   // - makes the robot turn left + makes the robot turn right
+        {
+            basePowerL = -1;
+            basePowerR = 1;
+        } else if (degrees >= 0) {
+            basePowerL = 1;
+            basePowerR = -1;
+        }
+
+        motorLeftRemote1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRightRemote1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        sleep(1000);
+        telemetry.addData("phase", "#1");
+        motorRightRemote1.setTargetPosition(getTicksForTurn(degrees) * basePowerR);
+        motorLeftRemote1.setTargetPosition(getTicksForTurn(degrees) * basePowerL);
+        sleep(1000);
+        telemetry.addData("phase", "#2");
+        motorRightRemote1.setPower(1);
+        motorLeftRemote1.setPower(1);
+        sleep(1000);
+        while(motorRightRemote1.isBusy() || motorLeftRemote1.isBusy())
+        {
+            waitOneFullHardwareCycle();
+            telemetry.addData("phase", "#3");
+        }
+        setDrivePower(0);
+//        int startingRightEncoder=motorRightRemote1.getCurrentPosition();
+//        int startingLeftEncoder=motorLeftRemote1.getCurrentPosition();
+//        int encoderTicsTraveled=motorRightRemote1.getCurrentPosition()-startingRightEncoder+startingLeftEncoder-motorLeftRemote1.getCurrentPosition();
+//        while (encoderTicsTraveled<1000){
+//            waitOneFullHardwareCycle();
+//            encoderTicsTraveled=motorRightRemote1.getCurrentPosition()-startingRightEncoder+startingLeftEncoder-motorLeftRemote1.getCurrentPosition();
+//
+//        }
         setDrivePower(0);
     }
 }
