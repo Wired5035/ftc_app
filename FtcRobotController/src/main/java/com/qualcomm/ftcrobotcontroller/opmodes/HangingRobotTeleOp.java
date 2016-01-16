@@ -30,6 +30,7 @@ public class HangingRobotTeleOp extends OpMode{
     DcMotor platformTilt;
     DcMotor tapeExtendRetractR;
     DcMotor tapeExtendRetractL;
+    DcMotor fourWheeler;
     Servo personArmServo;
     Servo ziplinerArmServo;
     LightSensor lightR;
@@ -41,6 +42,7 @@ public class HangingRobotTeleOp extends OpMode{
     float pvcExtenderR = 0.5f;
     float servoCenter = 0.525f;  //for continues rotation servos to stop them from spinning
     private boolean triggerflag;
+    private boolean ATV;
     private float servoLeftTension=.03f;
     private float servoRightTension=.06f;
     private boolean sticks_pushed;
@@ -63,11 +65,13 @@ public class HangingRobotTeleOp extends OpMode{
         platformTilt=hardwareMap.dcMotor.get("platform");
         tapeExtendRetractR=hardwareMap.dcMotor.get("tapeR");
         tapeExtendRetractL=hardwareMap.dcMotor.get("tapeL");
+        fourWheeler=hardwareMap.dcMotor.get("atv");
         personArmServo=hardwareMap.servo.get("dump");
         ziplinerArmServo=hardwareMap.servo.get("zipline");
        //initialise tank drive to forward
         tankF = true;
         //boolean slowD = false; // slow drive set to off
+        ATV = false;
     }
 
     @Override
@@ -92,7 +96,15 @@ public class HangingRobotTeleOp extends OpMode{
             slowD = true;
         }
 
-
+ /*       if (gamepad2.left_trigger)
+        {
+            ATV = true;
+        }
+        else if (gamepad2.right_trigger)
+        {
+            ATV = false;
+        }
+*/
 
 /*        if(gamepad1.left_stick_button && gamepad1.right_stick_button)
         {
@@ -132,8 +144,15 @@ public class HangingRobotTeleOp extends OpMode{
         if (null!=tapeExtendRetractR)     tapeExtendRetractR.setPower(-gamepad2.left_stick_y);
 
 
+        if(ATV)
+        {
+            if (null!=fourWheeler)      fourWheeler.setPower(1);
+        }
+
 
         if (null!=tapeExtendRetractL)   tapeExtendRetractL.setPower(-gamepad2.right_stick_y);
+
+
 
         if(gamepad2.dpad_up)
         {
@@ -190,7 +209,8 @@ public class HangingRobotTeleOp extends OpMode{
             if (newposition>=0)
             {
                 if (null!=ziplinerArmServo)           ziplinerArmServo.setPosition(newposition);
-            }        }
+            }
+        }
         //THE END
     }
 }
