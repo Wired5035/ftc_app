@@ -65,7 +65,7 @@ public class HangingRobotTeleOp extends OpMode{
 //        platformTilt=hardwareMap.dcMotor.get("platform");
         tapeExtendRetractR=hardwareMap.dcMotor.get("tapeR");
         tapeExtendRetractL=hardwareMap.dcMotor.get("tapeL");
-        fourWheeler=hardwareMap.dcMotor.get("atv");
+//        fourWheeler=hardwareMap.dcMotor.get("atv");
 //        personArmServo=hardwareMap.servo.get("dump");
 //        ziplinerArmServo=hardwareMap.servo.get("zipline");
        //initialise tank drive to forward
