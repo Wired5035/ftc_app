@@ -65,7 +65,7 @@ public class HangingRobotTeleOp extends OpMode{
         platformTilt=hardwareMap.dcMotor.get("platform");
         tapeExtendRetractR=hardwareMap.dcMotor.get("tapeR");
         tapeExtendRetractL=hardwareMap.dcMotor.get("tapeL");
-        fourWheeler=hardwareMap.dcMotor.get("atv");
+        fourWheeler=hardwareMap.dcMotor.get("ATV");
         personArmServo=hardwareMap.servo.get("dump");
         ziplinerArmServo=hardwareMap.servo.get("zipline");
        //initialise tank drive to forward
@@ -130,28 +130,24 @@ public class HangingRobotTeleOp extends OpMode{
             if (null!=personArmServo)  personArmServo.setPosition(personScoringArmPositionForward);
 
         }
-
+        // was one changed to b
+if (gamepad2.b)
         if(gamepad2.a)
         {
             if (null!=personArmServo)   personArmServo.setPosition(personScoringArmPositionBack);
             //popcorn = YAY!!!!!!!!!!            }
         }
 
-
-
-
-
+        //right on left? look at motor sides R L
         if (null!=tapeExtendRetractR)     tapeExtendRetractR.setPower(-gamepad2.left_stick_y);
 
+
+        if (null!=tapeExtendRetractL)    tapeExtendRetractL.setPower(-gamepad2.right_stick_y);
 
         if(ATV)
         {
             if (null!=fourWheeler)      fourWheeler.setPower(1);
         }
-
-
-        if (null!=tapeExtendRetractL)   tapeExtendRetractL.setPower(-gamepad2.right_stick_y);
-
 
 
         if(gamepad2.dpad_up)
@@ -193,7 +189,6 @@ public class HangingRobotTeleOp extends OpMode{
                 if (null!=motorLeftRemote1)          motorLeftRemote1.setPower(-gamepad1.right_stick_y);
                 if (null!=motorRightRemote1)    motorRightRemote1.setPower(-gamepad1.left_stick_y);
             }
-
         }
         if(gamepad1.dpad_up)
         {
