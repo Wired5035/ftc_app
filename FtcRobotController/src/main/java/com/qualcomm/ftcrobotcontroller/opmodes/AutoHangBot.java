@@ -50,7 +50,7 @@ public class AutoHangBot extends LinearOpMode {
         motorRightRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         platformTilt=hardwareMap.dcMotor.get("platform");
         tapeExtendRetract=hardwareMap.dcMotor.get("tape");
-        personArmServo=hardwareMap.servo.get("dump");
+        personArmServo=hardwareMap.servo.get("person");
         ziplinerArmServo=hardwareMap.servo.get("zipline");
 
         CountingUp.reset();
@@ -178,5 +178,22 @@ public class AutoHangBot extends LinearOpMode {
 //
 //        }
 //        setDrivePower(0);
+    }
+
+    public void drive (double inches) throws InterruptedException {
+//12.6
+        int basePowerL = 0;
+        int basePowerR = 0;
+        Reset_All_Encoders();
+        int tickR = ((int) (114.594 * inches));
+        int tickL = ((int) (114.594 * inches));
+
+        while(motorRightRemote1.getCurrentPosition() < tickR && motorLeftRemote1.getCurrentPosition() < tickL) {
+            telemetry.addData("phase", "#3");
+            motorLeftRemote1.setPower(getPowerForTicks(tickL - motorLeftRemote1.getCurrentPosition()));
+            motorRightRemote1.setPower(getPowerForTicks(tickR - motorRightRemote1.getCurrentPosition()));
+            waitOneFullHardwareCycle();
+        }
+        setDrivePower(0);
     }
 }

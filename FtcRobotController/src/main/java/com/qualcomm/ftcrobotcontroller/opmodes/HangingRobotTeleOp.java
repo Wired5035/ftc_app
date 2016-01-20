@@ -32,7 +32,7 @@ public class HangingRobotTeleOp extends OpMode{
     DcMotor tapeExtendRetractL;
     DcMotor fourWheeler;
     Servo personArmServo;
-//    Servo ziplinerArmServo;
+    Servo ziplinerArmServo;
     LightSensor lightR;
     LightSensor lightL;
 
@@ -62,12 +62,12 @@ public class HangingRobotTeleOp extends OpMode{
         lightR = hardwareMap.lightSensor.get("lightR");
         if (null!=motorLeftRemote1)   motorLeftRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         if (null!=motorRightRemote1)      motorRightRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-//        platformTilt=hardwareMap.dcMotor.get("platform");
+        platformTilt=hardwareMap.dcMotor.get("platform");
         tapeExtendRetractR=hardwareMap.dcMotor.get("tapeR");
         tapeExtendRetractL=hardwareMap.dcMotor.get("tapeL");
-//        fourWheeler=hardwareMap.dcMotor.get("atv");
-//        personArmServo=hardwareMap.servo.get("dump");
-//        ziplinerArmServo=hardwareMap.servo.get("zipline");
+        fourWheeler=hardwareMap.dcMotor.get("atv");
+        personArmServo=hardwareMap.servo.get("person");
+        ziplinerArmServo=hardwareMap.servo.get("zipline");
        //initialise tank drive to forward
         tankF = true;
         //boolean slowD = false; // slow drive set to off
@@ -76,8 +76,8 @@ public class HangingRobotTeleOp extends OpMode{
     @Override
     public void start() {
         super.start();
-//        if (null!=personArmServo)        personArmServo.setPosition(personScoringArmPositionBack);
-//        if (null!=ziplinerArmServo)        ziplinerArmServo.setPosition(ziplinerArmUp);
+        if (null!=personArmServo)        personArmServo.setPosition(personScoringArmPositionBack);
+        if (null!=ziplinerArmServo)        ziplinerArmServo.setPosition(ziplinerArmUp);
 
         //initialise servo positions on start
        boolean slowD = false;
@@ -85,6 +85,8 @@ public class HangingRobotTeleOp extends OpMode{
 
     @Override
     public void loop() {
+
+        telemetry.addData("start", "started");
 
         if(gamepad1.dpad_left)
         {
@@ -136,7 +138,7 @@ public class HangingRobotTeleOp extends OpMode{
             tapeExtendRetractR.setPower(-gamepad2.left_stick_y);
             if(gamepad2.right_stick_y > 0)
             {
-                fourWheeler.setPower((gamepad2.right_stick_y + -0.10));
+                if (null!=fourWheeler && gamepad2.left_stick_y < 1) fourWheeler.setPower((gamepad2.right_stick_y + -0.10));
             }
         }
 
@@ -146,7 +148,7 @@ public class HangingRobotTeleOp extends OpMode{
             tapeExtendRetractL.setPower(-gamepad2.right_stick_y);
             if(gamepad2.left_stick_y < 0)
             {
-                fourWheeler.setPower((gamepad2.left_stick_y + 0.10));
+                if (null!=fourWheeler && gamepad2.left_stick_y > -1) fourWheeler.setPower((gamepad2.left_stick_y + 0.10));
             }
         }
 

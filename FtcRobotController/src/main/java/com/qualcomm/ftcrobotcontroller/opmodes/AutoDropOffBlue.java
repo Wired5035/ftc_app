@@ -73,5 +73,11 @@ public class AutoDropOffBlue extends AutoHangBot {
         telemetry.addData("CountUp", ((int) CountingUp.time()));
         telemetry.addData("TimeLeft: ", timeLeft);
         sleep(1000);
+
+        Reset_All_Encoders();
+        drive(-12);
+        turnDegrees(180);
+        drive(12);
+
     }
 }
