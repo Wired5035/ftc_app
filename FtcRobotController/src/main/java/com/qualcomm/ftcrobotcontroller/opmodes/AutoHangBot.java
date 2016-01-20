@@ -199,7 +199,7 @@ public class AutoHangBot extends LinearOpMode {
         int tickR = ((int) (114.594 * inches));
         int tickL = ((int) (114.594 * inches));
 
-        while(motorRightRemote1.getCurrentPosition() < tickR && motorLeftRemote1.getCurrentPosition() < tickL) {
+        while(motorRightRemote1.getCurrentPosition() < tickR || motorLeftRemote1.getCurrentPosition() < tickL) {
             motorLeftRemote1.setPower(getPowerForTicks(tickL - motorLeftRemote1.getCurrentPosition()));
             motorRightRemote1.setPower(getPowerForTicks(tickR - motorRightRemote1.getCurrentPosition()));
             waitOneFullHardwareCycle();
