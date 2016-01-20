@@ -71,6 +71,7 @@ public class HangingRobotTeleOp extends OpMode{
        //initialise tank drive to forward
         tankF = true;
         //boolean slowD = false; // slow drive set to off
+        ATV = false;
     }
 
     @Override
@@ -97,6 +98,15 @@ public class HangingRobotTeleOp extends OpMode{
             slowD = true;
         }
 
+ /*       if (gamepad2.left_trigger)
+        {
+            ATV = true;
+        }
+        else if (gamepad2.right_trigger)
+        {
+            ATV = false;
+        }
+*/
 
 /*        if(gamepad1.left_stick_button && gamepad1.right_stick_button)
         {
@@ -122,18 +132,21 @@ public class HangingRobotTeleOp extends OpMode{
             if (null!=personArmServo)  personArmServo.setPosition(personScoringArmPositionForward);
 
         }
-
+        // was one changed to b
+if (gamepad2.b)
         if(gamepad2.a)
         {
             if (null!=personArmServo)   personArmServo.setPosition(personScoringArmPositionBack);
-            //popcorn = YAY!!!!!!!!!!
+            //popcorn = YAY!!!!!!!!!!            }
         }
 
+        //right on left? look at motor sides R L
+        if (null!=tapeExtendRetractR)     tapeExtendRetractR.setPower(-gamepad2.left_stick_y);
 
 
+        if (null!=tapeExtendRetractL)    tapeExtendRetractL.setPower(-gamepad2.right_stick_y);
 
-
-        if (null!=tapeExtendRetractR)
+        if(ATV)
         {
             tapeExtendRetractR.setPower(-gamepad2.left_stick_y);
             if(gamepad2.right_stick_y > 0)
@@ -151,8 +164,6 @@ public class HangingRobotTeleOp extends OpMode{
                 if (null!=fourWheeler && gamepad2.left_stick_y > -1) fourWheeler.setPower((gamepad2.left_stick_y + 0.10));
             }
         }
-
-
 
         if(gamepad2.dpad_up)
         {
@@ -193,24 +204,23 @@ public class HangingRobotTeleOp extends OpMode{
                 if (null!=motorLeftRemote1)          motorLeftRemote1.setPower(-gamepad1.right_stick_y);
                 if (null!=motorRightRemote1)    motorRightRemote1.setPower(-gamepad1.left_stick_y);
             }
-
         }
-//        if(gamepad1.dpad_up)
-//        {
-//            double newposition=ziplinerArmServo.getPosition()+.01;
-//                    if (newposition<=1)
-//                    {
-//                        if (null!=ziplinerArmServo)              ziplinerArmServo.setPosition(newposition);
-//                    }
-//        }
-//        else if(gamepad1.dpad_down)
-//        {
-//            double newposition=ziplinerArmServo.getPosition()-.01;
-//            if (newposition>=0)
-//            {
-//                if (null!=ziplinerArmServo)           ziplinerArmServo.setPosition(newposition);
-//            }
-//        }
+        if(gamepad1.dpad_up)
+        {
+            double newposition=ziplinerArmServo.getPosition()+.01;
+                    if (newposition<=1)
+                    {
+                        if (null!=ziplinerArmServo)              ziplinerArmServo.setPosition(newposition);
+                    }
+        }
+        else if(gamepad1.dpad_down)
+        {
+            double newposition=ziplinerArmServo.getPosition()-.01;
+            if (newposition>=0)
+            {
+                if (null!=ziplinerArmServo)           ziplinerArmServo.setPosition(newposition);
+            }
+        }
         //THE END
     }
 }

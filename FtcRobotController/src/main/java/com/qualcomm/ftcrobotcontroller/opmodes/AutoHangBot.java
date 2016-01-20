@@ -58,68 +58,6 @@ public class AutoHangBot extends LinearOpMode {
         ziplinerArmServo.setPosition(ziplinerArmUp);
 
     }
-    public void Motor_Right_Encoder_Reset ()
-    {
-        if(motorLeftRemote1 != null)
-        {
-            motorLeftRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-    }
-    public  void Motor_Left_Encoder_Reset ()
-    {
-        if(motorRightRemote1 != null)
-        {
-            motorRightRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        }
-    }
-
-    public void Reset_All_Encoders () throws InterruptedException
-    {
-        Motor_Left_Encoder_Reset();
-        Motor_Right_Encoder_Reset();
-        waitOneFullHardwareCycle();
-    }
-
-    public double getPowerForTicks (int ticksToGo)
-    {
-        if (ticksToGo > 1440)
-        {
-            return 1;
-        }
-        if (ticksToGo > 720)
-        {
-            return .75;
-        }
-        if (ticksToGo > 520)
-        {
-            return .50;
-        }
-        if (ticksToGo > 120)
-        {
-            return .25;
-        }
-        if (ticksToGo >= 0)
-        {
-            return .10;
-        }
-        if (ticksToGo >= - 120)
-        {
-            return -.10;
-        }
-        if (ticksToGo > -520)
-        {
-            return -.25;
-        }
-        if (ticksToGo > -720)
-        {
-            return -.50;
-        }
-        if(ticksToGo > -1440)
-        {
-            return -.75;
-        }
-        return -1;
-    }
 
     public void setDrivePower (double power)
     {
@@ -150,7 +88,6 @@ public class AutoHangBot extends LinearOpMode {
     public void turnDegrees (double degrees) throws InterruptedException {
         int basePowerL = 0;
         int basePowerR = 0;
-        Reset_All_Encoders();
         if (degrees < 0)   // - makes the robot turn left + makes the robot turn right
         {
             basePowerL = -1;
@@ -159,14 +96,22 @@ public class AutoHangBot extends LinearOpMode {
             basePowerL = 1;
             basePowerR = -1;
         }
-        int tickR = getTicksForTurn(degrees) * basePowerR;
-        int tickL = getTicksForTurn(degrees) * basePowerL;
-        //TREDOUBUR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        while(motorRightRemote1.getCurrentPosition() < tickR && motorLeftRemote1.getCurrentPosition() < tickL) {
-            telemetry.addData("phase", "#3");
-            motorLeftRemote1.setPower(getPowerForTicks(tickL - motorLeftRemote1.getCurrentPosition()));
-            motorRightRemote1.setPower(getPowerForTicks(tickR - motorRightRemote1.getCurrentPosition()));
+
+        motorLeftRemote1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRightRemote1.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        sleep(1000);
+        telemetry.addData("phase", "#1");
+        motorRightRemote1.setTargetPosition(getTicksForTurn(degrees) * basePowerR);
+        motorLeftRemote1.setTargetPosition(getTicksForTurn(degrees) * basePowerL);
+        sleep(1000);
+        telemetry.addData("phase", "#2");
+        motorRightRemote1.setPower(1);
+        motorLeftRemote1.setPower(1);
+        sleep(1000);
+        while(motorRightRemote1.isBusy() || motorLeftRemote1.isBusy())
+        {
             waitOneFullHardwareCycle();
+            telemetry.addData("phase", "#3");
         }
         setDrivePower(0);
 //        int startingRightEncoder=motorRightRemote1.getCurrentPosition();
@@ -177,7 +122,7 @@ public class AutoHangBot extends LinearOpMode {
 //            encoderTicsTraveled=motorRightRemote1.getCurrentPosition()-startingRightEncoder+startingLeftEncoder-motorLeftRemote1.getCurrentPosition();
 //
 //        }
-//        setDrivePower(0);
+        setDrivePower(0);
     }
 
     public void drive (double inches) throws InterruptedException {
