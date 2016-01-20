@@ -13,8 +13,8 @@ import java.util.Timer;
  */
 public class HangingRobotTeleOp extends OpMode{
     //Servo Arm Positions
-    static final float personScoringArmPositionBack=1f;
-    static final float personScoringArmPositionForward =0f;
+    static final float personScoringArmPositionBack=0f;
+    static final float personScoringArmPositionForward =1f;
     static final float ziplinerArmUp =0f;
     static final float ziplinerArmDown =1f;
 
@@ -77,11 +77,11 @@ public class HangingRobotTeleOp extends OpMode{
     @Override
     public void start() {
         super.start();
-        if (null!=personArmServo)        personArmServo.setPosition(personScoringArmPositionBack);
         if (null!=ziplinerArmServo)        ziplinerArmServo.setPosition(ziplinerArmUp);
+        if (null!=personArmServo)        personArmServo.setPosition(personScoringArmPositionBack);
 
         //initialise servo positions on start
-       boolean slowD = false;
+        boolean slowD = false;
     }
 
     @Override
