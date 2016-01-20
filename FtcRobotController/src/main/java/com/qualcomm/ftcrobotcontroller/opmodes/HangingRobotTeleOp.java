@@ -54,14 +54,9 @@ public class HangingRobotTeleOp extends OpMode{
         motorRightRemote1 = hardwareMap.dcMotor.get("right");  //FORWARD
 
         if (null!=motorLeftRemote1) motorLeftRemote1.setDirection(DcMotor.Direction.REVERSE);
-
         if (null!=motorRightRemote1)  motorRightRemote1.setDirection(DcMotor.Direction.FORWARD);
-        if (null!=motorLeftRemote1)   motorLeftRemote1.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        if (null!=motorRightRemote1)    motorRightRemote1.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         lightL = hardwareMap.lightSensor.get("lightL");
         lightR = hardwareMap.lightSensor.get("lightR");
-        if (null!=motorLeftRemote1)   motorLeftRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        if (null!=motorRightRemote1)      motorRightRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         platformTilt=hardwareMap.dcMotor.get("platform");
         tapeExtendRetractR=hardwareMap.dcMotor.get("tapeR");
         tapeExtendRetractL=hardwareMap.dcMotor.get("tapeL");
@@ -132,8 +127,7 @@ public class HangingRobotTeleOp extends OpMode{
             if (null!=personArmServo)  personArmServo.setPosition(personScoringArmPositionForward);
 
         }
-        // was one changed to b
-if (gamepad2.b)
+
         if(gamepad2.a)
         {
             if (null!=personArmServo)   personArmServo.setPosition(personScoringArmPositionBack);
@@ -156,35 +150,39 @@ if (gamepad2.b)
         }
 
 
-        if (null!=tapeExtendRetractL)
+        if (ATV)
         {
             tapeExtendRetractL.setPower(-gamepad2.right_stick_y);
             if(gamepad2.left_stick_y < 0)
             {
-                if (null!=fourWheeler && gamepad2.left_stick_y > -1) fourWheeler.setPower((gamepad2.left_stick_y + 0.10));
+                if (null!=fourWheeler && gamepad2.left_stick_y < 1) fourWheeler.setPower((gamepad2.left_stick_y + 0.10));
             }
         }
 
+        platformTilt.setPower(0);
         if(gamepad2.dpad_up)
         {
-            if (null!=platformTilt)      platformTilt.setPower(.05);
+            if (null!=platformTilt)      platformTilt.setPower(.10);
         }
         else if(gamepad2.dpad_down)
         {
-            if (null!=platformTilt)      platformTilt.setPower(-.05);
+            if (null!=platformTilt)      platformTilt.setPower(-.10);
         }
+
 
         //TANK DRIVE
         if(tankF)//CHANGES OUR DIRECTION BASED ON IF "tankF" IS TRUE OR FALSE
         {
             if(slowD) //CHANGES OUR SPEED BASED ON "slowD"
             {
+                telemetry.addData("slowDrive", "SLOW");
                 //forward tank drive
-                if (null!=motorLeftRemote1)          motorLeftRemote1.setPower(gamepad1.left_stick_y / 2);
-                if (null!=motorRightRemote1)     motorRightRemote1.setPower(gamepad1.right_stick_y / 2);
+                if (null!=motorLeftRemote1)             motorLeftRemote1.setPower(gamepad1.left_stick_y / 2);
+                if (null!=motorRightRemote1)            motorRightRemote1.setPower(gamepad1.right_stick_y / 2);
             }
             else
             {
+                telemetry.addData("slowDrive", "FAST");
                 //forward tank drive
                 if (null!=motorLeftRemote1)             motorLeftRemote1.setPower(gamepad1.left_stick_y);
                 if (null!=motorRightRemote1)             motorRightRemote1.setPower(gamepad1.right_stick_y);
