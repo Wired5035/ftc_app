@@ -25,7 +25,8 @@ public class AutoHangBot extends LinearOpMode {
     DcMotor motorRightRemote1;
     DcMotor motorLeftRemote1;
     DcMotor platformTilt;
-    DcMotor tapeExtendRetract;
+    DcMotor tapeExtendRetractR;
+    DcMotor tapeExtendRetractL;
     Servo personArmServo;
     Servo ziplinerArmServo;
     LightSensor lightR;
@@ -49,7 +50,8 @@ public class AutoHangBot extends LinearOpMode {
         motorLeftRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         motorRightRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
         platformTilt=hardwareMap.dcMotor.get("platform");
-        tapeExtendRetract=hardwareMap.dcMotor.get("tape");
+        tapeExtendRetractR=hardwareMap.dcMotor.get("tapeR");
+        tapeExtendRetractL=hardwareMap.dcMotor.get("tapeL");
         personArmServo=hardwareMap.servo.get("person");
         ziplinerArmServo=hardwareMap.servo.get("zipline");
 
@@ -57,6 +59,69 @@ public class AutoHangBot extends LinearOpMode {
        personArmServo.setPosition(personScoringArmPositionBack);
         ziplinerArmServo.setPosition(ziplinerArmUp);
 
+    }
+
+    public void Motor_Right_Encoder_Reset ()
+    {
+        if(motorLeftRemote1 != null)
+        {
+            motorLeftRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        }
+    }
+    public  void Motor_Left_Encoder_Reset ()
+    {
+        if(motorRightRemote1 != null)
+        {
+            motorRightRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        }
+    }
+
+    public void Reset_All_Encoders () throws InterruptedException
+    {
+        Motor_Left_Encoder_Reset();
+        Motor_Right_Encoder_Reset();
+        waitOneFullHardwareCycle();
+    }
+
+    public double getPowerForTicks (int ticksToGo)
+    {
+        if (ticksToGo > 1440)
+        {
+            return 1;
+        }
+        if (ticksToGo > 720)
+        {
+            return .75;
+        }
+        if (ticksToGo > 520)
+        {
+            return .50;
+        }
+        if (ticksToGo > 120)
+        {
+            return .25;
+        }
+        if (ticksToGo >= 0)
+        {
+            return .10;
+        }
+        if (ticksToGo >= - 120)
+        {
+            return -.10;
+        }
+        if (ticksToGo > -520)
+        {
+            return -.25;
+        }
+        if (ticksToGo > -720)
+        {
+            return -.50;
+        }
+        if(ticksToGo > -1440)
+        {
+            return -.75;
+        }
+        return -1;
     }
 
     public void setDrivePower (double power)
@@ -74,6 +139,7 @@ public class AutoHangBot extends LinearOpMode {
     public void turnLeft90Degrees () throws InterruptedException {
         motorRightRemote1.setPower(1);
         motorLeftRemote1.setPower(-1);
+        Reset_All_Encoders();
         int startingRightEncoder=motorRightRemote1.getCurrentPosition();
                 int startingLeftEncoder=motorLeftRemote1.getCurrentPosition();
         int encoderTicsTraveled=motorRightRemote1.getCurrentPosition()-startingRightEncoder+startingLeftEncoder-motorLeftRemote1.getCurrentPosition();
@@ -134,7 +200,6 @@ public class AutoHangBot extends LinearOpMode {
         int tickL = ((int) (114.594 * inches));
 
         while(motorRightRemote1.getCurrentPosition() < tickR && motorLeftRemote1.getCurrentPosition() < tickL) {
-            telemetry.addData("phase", "#3");
             motorLeftRemote1.setPower(getPowerForTicks(tickL - motorLeftRemote1.getCurrentPosition()));
             motorRightRemote1.setPower(getPowerForTicks(tickR - motorRightRemote1.getCurrentPosition()));
             waitOneFullHardwareCycle();
