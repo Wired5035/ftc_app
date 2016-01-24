@@ -199,11 +199,16 @@ public class AutoHangBot extends LinearOpMode {
         int tickR = ((int) (114.594 * inches));
         int tickL = ((int) (114.594 * inches));
 
+        telemetry.addData("drive start", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
+        int count = 0;
         while(motorRightRemote1.getCurrentPosition() < tickR || motorLeftRemote1.getCurrentPosition() < tickL) {
             motorLeftRemote1.setPower(getPowerForTicks(tickL - motorLeftRemote1.getCurrentPosition()));
             motorRightRemote1.setPower(getPowerForTicks(tickR - motorRightRemote1.getCurrentPosition()));
             waitOneFullHardwareCycle();
+            telemetry.addData("drive count", String.format("count= %d tickR=%d tickL=%d motorR=%d motorL=%d", count, tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
+            ++count;
         }
+        telemetry.addData("drive end", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
         setDrivePower(0);
     }
 }
