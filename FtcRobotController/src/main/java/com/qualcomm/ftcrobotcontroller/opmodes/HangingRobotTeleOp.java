@@ -14,10 +14,10 @@ import java.util.Timer;
 public class HangingRobotTeleOp extends OpMode{
     //Servo Arm Positions
     static final float personScoringArmPositionBack=0f;
-    static final float personScoringArmPositionForward =1f;
     static final float ziplinerArmUp =0f;
+    static final float personScoringArmPositionForward =1f;
     static final float ziplinerArmDown =1f;
-
+    static final float platformtiltvelocity =.06f;
 
     boolean tankF; //to change the drive direction
     boolean slowD;
@@ -154,11 +154,11 @@ public class HangingRobotTeleOp extends OpMode{
         platformTilt.setPower(0);
         if(gamepad2.dpad_up)
         {
-            if (null!=platformTilt)      platformTilt.setPower(.10);
+            if (null!=platformTilt)      platformTilt.setPower(-platformtiltvelocity);
         }
         else if(gamepad2.dpad_down)
         {
-            if (null!=platformTilt)      platformTilt.setPower(-.10);
+            if (null!=platformTilt)      platformTilt.setPower(platformtiltvelocity);
         }
 
 
@@ -197,16 +197,16 @@ public class HangingRobotTeleOp extends OpMode{
         }
         if(gamepad1.dpad_up || gamepad2.right_bumper)
         {
-            double newposition=ziplinerArmServo.getPosition()+.01;
-                    if (newposition<=1)
+            double newposition=ziplinerArmServo.getPosition()-.01;
+                    if (newposition>=0)
                     {
                         if (null!=ziplinerArmServo)              ziplinerArmServo.setPosition(newposition);
                     }
         }
         else if(gamepad1.dpad_down || gamepad2.left_bumper)
         {
-            double newposition=ziplinerArmServo.getPosition()-.01;
-            if (newposition>=0)
+            double newposition=ziplinerArmServo.getPosition()+.01;
+            if (newposition<=1)
             {
                 if (null!=ziplinerArmServo)           ziplinerArmServo.setPosition(newposition);
             }
