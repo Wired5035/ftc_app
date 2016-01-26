@@ -130,17 +130,25 @@ public class HangingRobotTeleOp extends OpMode{
         double tapeLPower = -gamepad2.right_stick_y;
         double tapeRPower = -gamepad2.left_stick_y;
 
-        if(tapeLPower < -.5 && tapeRPower < -.5)
+        if(tapeLPower < 0 )
         {
-            tapeExtendRetractR.setPower(tapeRPower);
+
             tapeExtendRetractL.setPower(tapeLPower);
         }
         else
         {
-            tapeExtendRetractR.setPower(tapeRPower * tapeRPowerMultiplier);
+
             tapeExtendRetractL.setPower(tapeLPower * tapeLPowerMultiplier);
         }
 
+        if(tapeRPower < 0)
+        {
+            tapeExtendRetractR.setPower(tapeRPower);
+        }
+        else
+        {
+            tapeExtendRetractR.setPower(tapeRPower * tapeRPowerMultiplier);
+        }
 
         if(tapeLPower > 0 || tapeRPower > 0)
         {
