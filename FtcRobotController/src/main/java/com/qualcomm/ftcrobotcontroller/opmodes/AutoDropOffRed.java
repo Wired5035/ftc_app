@@ -26,7 +26,5 @@ public class AutoDropOffRed extends AutoHangBot {
             waitOneFullHardwareCycle();
         }
         setDrivePower(0);
-        turnLeft90Degrees (
-        );
     }
 }

@@ -17,7 +17,7 @@ public class HangingRobotTeleOp extends OpMode{
     static final float ziplinerArmUp =0f;
     static final float personScoringArmPositionForward =1f;
     static final float ziplinerArmDown =1f;
-    static final float platformtiltvelocity =.06f;
+    static final float platformtiltvelocity =.105f;
 
     boolean tankF; //to change the drive direction
     boolean slowD;
