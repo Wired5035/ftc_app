@@ -21,11 +21,14 @@ public class HangingRobotTeleOp extends OpMode{
 
     boolean tankF; //to change the drive direction
     boolean slowD;
+    boolean didExtend = false;
     float CurrentArmPosition = 1;
     double lastLoopTime;
     double tapeLPowerMultiplier = .5;
     double tapeRPowerMultiplier = .4;
     double fourWheelerMultiplier = 1;
+    double lock = 0;
+    double unlock = 1;
 
     //Motors
     DcMotor motorRightRemote1;
@@ -36,6 +39,7 @@ public class HangingRobotTeleOp extends OpMode{
     DcMotor fourWheeler;
     Servo personArmServo;
     Servo ziplinerArmServo;
+    Servo assister;
     LightSensor lightR;
     LightSensor lightL;
 
@@ -66,6 +70,7 @@ public class HangingRobotTeleOp extends OpMode{
         fourWheeler=hardwareMap.dcMotor.get("atv");
         personArmServo=hardwareMap.servo.get("person");
         ziplinerArmServo=hardwareMap.servo.get("zipline");
+        assister=hardwareMap.servo.get("assister");
        //initialise tank drive to forward
         tankF = true;
         //boolean slowD = false; // slow drive set to off
@@ -79,6 +84,8 @@ public class HangingRobotTeleOp extends OpMode{
 
         //initialise servo positions on start
         boolean slowD = false;
+        didExtend = false;
+        assister.setPosition(unlock);
     }
 
     @Override
@@ -127,10 +134,20 @@ public class HangingRobotTeleOp extends OpMode{
             //popcorn = YAY!!!!!!!!!!            }
         }
 
+        if(gamepad2.x)
+        {
+            assister.setPosition(lock);
+        }
+
+        if(gamepad2.b)
+        {
+            assister.setPosition(unlock);
+        }
+
         double tapeLPower = -gamepad2.right_stick_y;
         double tapeRPower = -gamepad2.left_stick_y;
 
-        if(tapeLPower < 0 )
+        if(tapeLPower < 0 )//&& didExtend)
         {
 
             tapeExtendRetractL.setPower(tapeLPower);
@@ -141,7 +158,7 @@ public class HangingRobotTeleOp extends OpMode{
             tapeExtendRetractL.setPower(tapeLPower * tapeLPowerMultiplier);
         }
 
-        if(tapeRPower < 0)
+        if(tapeRPower < 0 )//&& didExtend)
         {
             tapeExtendRetractR.setPower(tapeRPower);
         }
@@ -153,6 +170,7 @@ public class HangingRobotTeleOp extends OpMode{
         if(tapeLPower > 0 || tapeRPower > 0)
         {
             fourWheeler.setPower(Math.max(tapeLPower, tapeRPower)* fourWheelerMultiplier);
+            //didExtend = true;
         }
         else
         {
