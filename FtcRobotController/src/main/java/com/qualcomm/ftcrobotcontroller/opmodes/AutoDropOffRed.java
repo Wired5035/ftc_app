@@ -20,11 +20,14 @@ public class AutoDropOffRed extends AutoHangBot {
         super.runOpMode();
 
         waitForStart();
-        setDrivePower(.8);
-        while (lightR.getLightDetected()<.45)
-        {
-            waitOneFullHardwareCycle();
-        }
-        setDrivePower(0);
+        drive (40);
+        sleep(9000);
+        drive (44);
+        turnDegrees(-90);
+        sleep (1000);
+        drive (72);
+        personArmServo.setPosition(personScoringArmPositionForward);
+        sleep (2000);
+        personArmServo.setPosition(personScoringArmPositionBack);
     }
 }

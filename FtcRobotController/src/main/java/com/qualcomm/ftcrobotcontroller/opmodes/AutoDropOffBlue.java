@@ -22,6 +22,20 @@ public class AutoDropOffBlue extends AutoHangBot {
 
         drive(12);
         sleep(1000);
+        drive(6);
+        sleep(1000);
         turnDegrees(90);
-    }
+        sleep(1000);
+        drive(6);
+        sleep(1000);
+        turnDegrees(90);
+        sleep(1000);
+        drive(6);
+        sleep(1000);
+        turnDegrees(90);
+        sleep(1000);
+        drive(6);
+        sleep(1000);
+        turnDegrees(90);
+        }
 }

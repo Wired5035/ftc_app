@@ -2,11 +2,8 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import java.util.Timer;
 
 /**
  * Created by Kota Baer on 11/17/2015.
@@ -14,9 +11,9 @@ import java.util.Timer;
 public class HangingRobotTeleOp extends OpMode{
     //Servo Arm Positions
     static final float personScoringArmPositionBack=0f;
-    static final float ziplinerArmUp =0f;
+    static final float leftZiplineInit =.06f;
     static final float personScoringArmPositionForward =1f;
-    static final float ziplinerArmDown =1f;
+    static final float RightZiplineInit =.97f;
     static final float platformtiltvelocity =.105f;
 
     boolean tankF; //to change the drive direction
@@ -38,7 +35,8 @@ public class HangingRobotTeleOp extends OpMode{
     DcMotor tapeExtendRetractL;
     DcMotor fourWheeler;
     Servo personArmServo;
-    Servo ziplinerArmServo;
+    Servo ziplinerArmServoRight;
+    Servo ziplinerArmServoLeft;
     Servo assister;
     LightSensor lightR;
     LightSensor lightL;
@@ -69,12 +67,14 @@ public class HangingRobotTeleOp extends OpMode{
         tapeExtendRetractL=hardwareMap.dcMotor.get("tapeL");
         fourWheeler=hardwareMap.dcMotor.get("atv");
         personArmServo=hardwareMap.servo.get("person");
-        ziplinerArmServo=hardwareMap.servo.get("zipline");
+        ziplinerArmServoRight =hardwareMap.servo.get("ziplineR");
+        ziplinerArmServoLeft =hardwareMap.servo.get("ziplineL");
         assister=hardwareMap.servo.get("assister");
        //initialise tank drive to forward
         tankF = true;
         //boolean slowD = false; // slow drive set to off
-        if (null!=ziplinerArmServo)        ziplinerArmServo.setPosition(ziplinerArmUp);
+        if (null!= ziplinerArmServoRight)        ziplinerArmServoRight.setPosition(RightZiplineInit);
+        if (null!= ziplinerArmServoLeft)         ziplinerArmServoLeft.setPosition(leftZiplineInit);
         if (null!=personArmServo)        personArmServo.setPosition(personScoringArmPositionBack);
     }
 
@@ -221,20 +221,35 @@ public class HangingRobotTeleOp extends OpMode{
                 if (null!=motorRightRemote1)    motorRightRemote1.setPower(-gamepad1.left_stick_y);
             }
         }
-        if(gamepad1.dpad_up || gamepad2.right_bumper)
+        if(gamepad1.right_trigger > 0.75 || gamepad2.right_trigger > 0.75)
         {
-            double newposition=ziplinerArmServo.getPosition()-.01;
+            double newposition= ziplinerArmServoRight.getPosition()-.01;
                     if (newposition>=0)
                     {
-                        if (null!=ziplinerArmServo)              ziplinerArmServo.setPosition(newposition);
+                        if (null!= ziplinerArmServoRight)              ziplinerArmServoRight.setPosition(newposition);
                     }
         }
-        else if(gamepad1.dpad_down || gamepad2.left_bumper)
+        if(gamepad1.right_bumper || gamepad2.right_bumper)
         {
-            double newposition=ziplinerArmServo.getPosition()+.01;
+            double newposition= ziplinerArmServoRight.getPosition()+.01;
             if (newposition<=1)
             {
-                if (null!=ziplinerArmServo)           ziplinerArmServo.setPosition(newposition);
+                if (null!= ziplinerArmServoRight)           ziplinerArmServoRight.setPosition(newposition);
+            }
+
+        }
+        if(gamepad1.left_bumper || gamepad2.left_bumper)
+        {
+            double newposition= ziplinerArmServoLeft.getPosition()-.01;
+            if (newposition>=0)
+            {
+                if (null!= ziplinerArmServoLeft)              ziplinerArmServoLeft.setPosition(newposition);
+            }
+        }
+        else if(gamepad1.left_trigger > 0.75 || gamepad2.left_trigger > 0.75) {
+            double newposition = ziplinerArmServoLeft.getPosition() + .01;
+            if (newposition <= 1) {
+                if (null != ziplinerArmServoLeft) ziplinerArmServoLeft.setPosition(newposition);
             }
         }
         //THE END
