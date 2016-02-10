@@ -85,12 +85,12 @@ public class AutoHangBot extends LinearOpMode {
         waitOneFullHardwareCycle();
     }
 
-    public double getPowerForTicks (int ticksToGo)
+    public double getPowerForTicksfordrive (int ticksToGo)
     {
         int multi = 3;
         if (ticksToGo > 1440 * multi)
         {
-            return .4;
+            return .35;
         }
         if (ticksToGo > 720 * multi)
         {
@@ -106,25 +106,35 @@ public class AutoHangBot extends LinearOpMode {
         }
         if (ticksToGo >= 0 * multi)
         {
+            return .1;
+        }
+        return 0;
+    }
+
+    public double getPowerForTicksforturn (int ticksToGo)
+    {
+        int multi = 3;
+        if (ticksToGo > 1440 * multi)
+        {
+            return 1;
+        }
+        if (ticksToGo > 720 * multi)
+        {
+            return .75;
+        }
+        if (ticksToGo > 520 * multi)
+        {
+            return .5;
+        }
+        if (ticksToGo > 120 * multi)
+        {
+            return .4;
+        }
+        if (ticksToGo >= 0 * multi)
+        {
             return .2;
         }
-        if (ticksToGo >= - 120 * multi)
-        {
-            return -.2;
-        }
-        if (ticksToGo > -520 * multi)
-        {
-            return -.2;
-        }
-        if (ticksToGo > -720 * multi)
-        {
-            return -.30;
-        }
-        if(ticksToGo > -1440 * multi)
-        {
-            return -.75;
-        }
-        return -1;
+        return 0;
     }
 
     public void setDrivePower (double power)
@@ -170,7 +180,7 @@ public class AutoHangBot extends LinearOpMode {
         int leftTicksToGo = (tickL - motorLeftRemote1.getCurrentPosition() * basePowerL);
 
         while(rightTicksToGo > 0 || leftTicksToGo > 0) {
-            double LPower = getPowerForTicks(leftTicksToGo);
+            double LPower = getPowerForTicksforturn(leftTicksToGo);
             if (leftTicksToGo > 0)
             {
                 motorLeftRemote1.setPower(LPower * basePowerL);
@@ -178,7 +188,7 @@ public class AutoHangBot extends LinearOpMode {
                 motorLeftRemote1.setPower(0);
             }
 
-            double RPower = getPowerForTicks(rightTicksToGo);
+            double RPower = getPowerForTicksforturn(rightTicksToGo);
             if (rightTicksToGo > 0)
             {
                 motorRightRemote1.setPower(RPower * basePowerR);
@@ -200,6 +210,8 @@ public class AutoHangBot extends LinearOpMode {
 
     public void drive (double inches) throws InterruptedException {
 //12.6
+
+        int multier = 0;
         Reset_All_Encoders();
         int tickR = inchToTickConverter(inches);
         int tickL = inchToTickConverter(inches);
@@ -207,8 +219,8 @@ public class AutoHangBot extends LinearOpMode {
         //telemetry.addData("drive start", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
         int count = 0;
         while(motorRightRemote1.getCurrentPosition() < tickR || motorLeftRemote1.getCurrentPosition() < tickL) {
-            motorLeftRemote1.setPower(getPowerForTicks(tickL - motorLeftRemote1.getCurrentPosition()));
-            motorRightRemote1.setPower(getPowerForTicks(tickR - motorRightRemote1.getCurrentPosition()));
+            motorLeftRemote1.setPower(getPowerForTicksfordrive(tickL - motorLeftRemote1.getCurrentPosition()));
+            motorRightRemote1.setPower(getPowerForTicksfordrive(tickR - motorRightRemote1.getCurrentPosition()));
             waitOneFullHardwareCycle();
             //telemetry.addData("drive count", String.format("count= %d tickR=%d tickL=%d motorR=%d motorL=%d", count, tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
             ++count;
