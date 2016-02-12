@@ -90,23 +90,23 @@ public class AutoHangBot extends LinearOpMode {
         int multi = 3;
         if (ticksToGo > 1440 * multi)
         {
-            return .35;
+            return .2;
         }
         if (ticksToGo > 720 * multi)
         {
-            return .3;
+            return .175;
         }
         if (ticksToGo > 520 * multi)
         {
-            return .25;
+            return .175;
         }
         if (ticksToGo > 120 * multi)
         {
-            return .2;
+            return .1555;
         }
         if (ticksToGo >= 0 * multi)
         {
-            return .1;
+            return .150;
         }
         return 0;
     }
