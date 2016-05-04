@@ -69,7 +69,9 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("AutoDropOffRed",AutoDropOffRed.class);
     //manager.register("Team10618", Team10618.class);
     manager.register("TestStuff", TestStuff.class);
-
+    manager.register("IRtester", IRtester.class);
+    manager.register("ODS", ODS.class);
+    manager.register("FollowTheLine", FollowTheLine.class);
     /*
      * Uncomment any of the following lines if you want to register an op mode.
      */

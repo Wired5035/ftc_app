@@ -115,7 +115,7 @@ public class PushBotAutoSensors extends PushBotTelemetrySensors
             // are the same and positive.
             //
             // The magnitude of the first and second parameters determine the
-            // speed (0.0 is stopped and 1.0 is full).
+            // turnSpeed (0.0 is stopped and 1.0 is full).
             //
             // The third and fourth parameters determine how long the wheels
             // turn.

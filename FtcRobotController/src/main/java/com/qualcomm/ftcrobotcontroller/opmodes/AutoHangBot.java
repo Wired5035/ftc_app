@@ -1,5 +1,7 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import android.app.backup.RestoreObserver;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -40,22 +42,19 @@ public class AutoHangBot extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         //setup all Motors and servos for config file on phone
-        motorLeftRemote1 = hardwareMap.dcMotor.get("left");  //REVERSED
+        motorLeftRemote1 = hardwareMap.dcMotor.get("left");  //RawWwaEVERSED
         motorRightRemote1 = hardwareMap.dcMotor.get("right");  //FORWARD
         motorLeftRemote1.setDirection(DcMotor.Direction.FORWARD);
         motorRightRemote1.setDirection(DcMotor.Direction.REVERSE);
-        motorLeftRemote1.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        motorRightRemote1.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        lightL = hardwareMap.lightSensor.get("lightL");
-        lightR = hardwareMap.lightSensor.get("lightR");
-        motorLeftRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        motorRightRemote1.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+//        lightL = hardwareMap.lightSensor.get("lightL");
+//        lightR = hardwareMap.lightSensor.get("lightR");
         platformTilt=hardwareMap.dcMotor.get("platform");
         tapeExtendRetractR=hardwareMap.dcMotor.get("tapeR");
         tapeExtendRetractL=hardwareMap.dcMotor.get("tapeL");
         personArmServo=hardwareMap.servo.get("person");
         ziplinerArmServoRight =hardwareMap.servo.get("ziplineR");
         ziplinerArmServoLeft =hardwareMap.servo.get("ziplineL");
+        Reset_All_Encoders();
 
         CountingUp.reset();
        personArmServo.setPosition(personScoringArmPositionBack);
@@ -80,8 +79,8 @@ public class AutoHangBot extends LinearOpMode {
         }
 
 
-        motorLeftRemote1.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        motorRightRemote1.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        motorLeftRemote1.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        motorRightRemote1.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         waitOneFullHardwareCycle();
     }
 
