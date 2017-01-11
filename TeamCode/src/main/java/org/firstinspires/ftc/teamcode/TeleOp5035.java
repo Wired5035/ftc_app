@@ -36,7 +36,7 @@ public class TeleOp5035 extends OpMode {
     int PosNum = 0;
     int counter = 0;
     static final double DurDown = 350;
-    static final double DurUp = 10;
+    static final double DurUp = 50;
     static final double PickUpSpeed = .60; // power of the arm in the up direction
     static final double BallDumpIdlePower = 0.06;
     ElapsedTime BallPickUpTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -88,11 +88,11 @@ public class TeleOp5035 extends OpMode {
                 robot.ballBooster2.setPower(Math.max(robot.ballBooster2.getPower() + .000005, 1));//Slowly increase speed of the ballBoosters
         }
         //if ball boosters are on or the gamepad2.guide button is pressed, and the gamepad2.righttrigger is pressed, the pop up servo fires.
-        if ((robot.ballBooster1.getPower() > 0.9 || gamepad2.guide == true) && gamepad2.right_trigger > 0.5) {
+        if ((robot.ballBooster1.getPower() > 0.9 || gamepad2.guide == true) && gamepad2.right_bumper) {
             robot.triggered();
         }
         //if trigger is not pressed then it is reset
-        if (gamepad2.right_trigger < 0.25) {
+        if (!gamepad2.right_bumper) {
             robot.detriggered();
         }
     }
@@ -113,7 +113,7 @@ public class TeleOp5035 extends OpMode {
             SweeperPower = !SweeperPower;
         }
 
-        if(SweeperPower && !IsUp) {
+        if(robot.grabbutton.isPressed()) {
             if (null != robot.sweeperMotor)
                 robot.sweeperMotor.setPower(Math.max(robot.sweeperMotor.getPower() + .05, 1));//Slowly increase speed of the sweeperMotor
         }
