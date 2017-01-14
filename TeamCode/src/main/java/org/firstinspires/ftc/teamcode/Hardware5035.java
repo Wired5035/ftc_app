@@ -73,6 +73,7 @@ public class Hardware5035 {
 
         // Define and Initialize Motors
         colorDetector = hwMap.colorSensor.get("Detector");
+        colorDetector.enableLed(false);
         frontUltra = hwMap.ultrasonicSensor.get("front ultra");
         sideUltra = hwMap.opticalDistanceSensor.get("side ultra");
         constServo = hwMap.servo.get("const servo");
@@ -117,6 +118,17 @@ public class Hardware5035 {
         ballBooster2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public void stop()
+    {
+        sweeperMotor.setPower(0);
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+        ballBooster1.setPower(0);
+        ballBooster2.setPower(0);
+        ballDump.setPower(0.10);
+        popUp.setPosition(1);
+        constServo.setPosition(0.51);
+    }
     /***
      * waitForTick implements a periodic delay. However, this acts like a metronome with a regular
      * periodic tick.  This is used to compensate for varying processing times for each cycle.
@@ -295,15 +307,15 @@ public class Hardware5035 {
 //12.6
 
         int multier = 0;
-        Reset_All_Encoders();
-        int tickR = inchToTickConverter(inches);
-        int tickL = inchToTickConverter(inches);
+        //Reset_All_Encoders();
+        int tickR = rightMotor.getCurrentPosition() - inchToTickConverter(inches);
+        int tickL = leftMotor.getCurrentPosition() - inchToTickConverter(inches);
 
         //telemetry.addData("driveReverse start", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
         int count = 0;
-        while(rightMotor.getCurrentPosition() < tickR || leftMotor.getCurrentPosition() < tickL) {
-            leftMotor.setPower(-getPowerForTicksfordrive(tickL - leftMotor.getCurrentPosition()));
-            rightMotor.setPower(-getPowerForTicksfordrive(tickR - rightMotor.getCurrentPosition()));
+        while(rightMotor.getCurrentPosition() > tickR || leftMotor.getCurrentPosition() > tickL) {
+            leftMotor.setPower(-getPowerForTicksfordrive(leftMotor.getCurrentPosition() - tickL));
+            rightMotor.setPower(-getPowerForTicksfordrive(rightMotor.getCurrentPosition() - tickR));
             //waitOneFullHardwareCycle();
             //telemetry.addData("driveReverse count", String.format("count= %d tickR=%d tickL=%d motorR=%d motorL=%d", count, tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
             ++count;

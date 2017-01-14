@@ -48,6 +48,12 @@ public class TeleOp5035 extends OpMode {
     }
 
     @Override
+    public void stop()
+    {
+        robot.stop();
+    }
+
+    @Override
     public void loop() {
 
         //Reverse drive when guide button is pressed
