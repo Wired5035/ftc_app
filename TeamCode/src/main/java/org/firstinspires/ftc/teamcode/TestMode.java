@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * Created by Kota Baer on 11/22/2016.
  */
 @TeleOp(name = "TestMode")
-@Disabled
 public class TestMode extends OpMode  {
     Hardware5035 robot = new Hardware5035();
 
@@ -20,6 +19,7 @@ public class TestMode extends OpMode  {
 
     @Override
     public void loop() {
+        /*
         if (gamepad1.x)
         {
             robot.popUp.setPosition(Math.min(robot.popUp.getPosition() + 0.009, 1));
@@ -30,5 +30,16 @@ public class TestMode extends OpMode  {
         }
         telemetry.addData("Position of server", robot.popUp.getPosition());
         telemetry.update();
+        */
+        telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
+        robot.setDrivePower(.25);
+        //drive using ultrasonic till ~14cm away from wall
+        telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
+        while(robot.frontUltra.getUltrasonicLevel() >= 20){
+            telemetry.addData("getUltrasonicLevel()", robot.frontUltra.getUltrasonicLevel());}//turn off drive power
+        robot.setDrivePower(0);
+        telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
+
+        telemetry.addData("getUltrasonicLevel()", robot.frontUltra.getUltrasonicLevel());
     }
 }

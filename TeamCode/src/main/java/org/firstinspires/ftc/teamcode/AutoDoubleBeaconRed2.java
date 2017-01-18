@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+/**
+ * Created by Owner on 1/17/2017.
+ */
+
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -15,12 +19,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import static android.graphics.Color.RED;
 import static android.graphics.Color.red;
 
-/**
- * Created by Kota Baer on 10/11/2016.
- */
 
-@Autonomous(name = "AutoTest", group = "Concept")
-public class AutoDoubleBeaconBlue2 extends LinearOpMode {
+@Autonomous(name = "AutoTestRed", group = "Concept")
+public class AutoDoubleBeaconRed2 extends LinearOpMode {
     double OneFoot = 12; //in inches
 
     @Override
@@ -86,12 +87,12 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         */
 
         //////////Drive until 5 in from field wall using FWD ultrasonic////////////////////////
-       /////////////////////////////If we can get the level then we can determin where we are, I don't know how to write the code so that
+        /////////////////////////////If we can get the level then we can determin where we are, I don't know how to write the code so that
         //////////////////////////////Everything is in the hardware section to make it work????????????????????
-       /// LegacyModule getLegacyModule();
-       ///// double getUltrasonicLevel();
+        /// LegacyModule getLegacyModule();
+        ///// double getUltrasonicLevel();
         ////////////////////////////////////////
- ///////////////////////ALL code before this is good/////////////////////////
+        ///////////////////////ALL code before this is good/////////////////////////
         ////////////////////// Drive backwards to white line under the FIRST BEACON//////////////////////////////////
         boolean found_color = false;
         boolean red_first = false;
@@ -168,20 +169,20 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
 
         robot.constServo.setPosition(.51);
 
-      /////////// Drives 1 foot toward the next beacon before starting to look for the line. the other line without finding it immediately.
+        /////////// Drives 1 foot toward the next beacon before starting to look for the line. the other line without finding it immediately.
         robot.rightMotor.setPower(-.4);
         robot.leftMotor.setPower(-.4);
 
         sleep (1500);
 
-       // robot.driveReverse(23);
+        // robot.driveReverse(23);
 
         ////////////////////////// Finds SECOND BEACON  line, and resets color sensor booleans/////////////////
         found_color = false;
         red_first = false;
         while (robot.leftLightSensor.getLightDetected() < .38 || robot.rightLightSensor.getLightDetected() < .38) {
 
-          ////////finds first color seen on the second beacon//////////////////////////
+            ////////finds first color seen on the second beacon//////////////////////////
             if (found_color == false) ;
             {
                 if (robot.colorDetector.red() >=2) {
@@ -248,7 +249,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
             robot.driveForward(4.5);
         }
 
-     /////////////////moves continuous rotation servo to push button on beacon////////////////
+        /////////////////moves continuous rotation servo to push button on beacon////////////////
         robot.constServo.setPosition(0);
         sleep(3400);
 
@@ -256,7 +257,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         /////////////pulls beacon pusher arm 3/4 of the way back in
         robot.constServo.setPosition(1);
         sleep(2800);
-       //////////////////Turn a little so that when we back up we vier away from the wall
+        //////////////////Turn a little so that when we back up we vier away from the wall
         robot.turnDegrees(-8);
 
         ////////////////////drives towards the ramp to park on the center vortex platform
@@ -275,6 +276,3 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
 
     }
 }
-
-
-

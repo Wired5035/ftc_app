@@ -47,8 +47,9 @@ public class Hardware5035 {
     public LightSensor rightLightSensor;
     public ColorSensor colorDetector;
     public UltrasonicSensor frontUltra;
-    public OpticalDistanceSensor sideUltra;
+    public UltrasonicSensor sideUltra;
     public Servo constServo;
+
     //color
     //ultrasonic
     //light
@@ -75,7 +76,7 @@ public class Hardware5035 {
         colorDetector = hwMap.colorSensor.get("Detector");
         colorDetector.enableLed(false);
         frontUltra = hwMap.ultrasonicSensor.get("front ultra");
-        sideUltra = hwMap.opticalDistanceSensor.get("side ultra");
+        sideUltra = hwMap.ultrasonicSensor.get("side ultra");
         constServo = hwMap.servo.get("const servo");
         ballBooster1 = hwMap.dcMotor.get("ball booster 1");
         ballBooster2 = hwMap.dcMotor.get("ball booster 2");
@@ -111,8 +112,8 @@ public class Hardware5035 {
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //Encoders are not currently hooked up. uncoment these lines when they are.
         ballBooster1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         ballBooster2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -162,23 +163,23 @@ public class Hardware5035 {
         int multi = 3;
         if (ticksToGo > 1440 * multi)
         {
-            return .6;
+            return .90;
         }
         if (ticksToGo > 720 * multi)
         {
-            return .375;
+            return .80;
         }
         if (ticksToGo > 520 * multi)
         {
-            return .375;
+            return .60;
         }
         if (ticksToGo > 120 * multi)
         {
-            return .3555;
+            return .50;
         }
         if (ticksToGo >= 0 * multi)
         {
-            return .350;
+            return .40;
         }
         return 0;
     }
@@ -345,4 +346,6 @@ public class Hardware5035 {
     }
 
 
-}
+    }
+
+
