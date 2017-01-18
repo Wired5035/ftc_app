@@ -64,16 +64,27 @@ public class TeleOp5035 extends OpMode {
 
         if (Reverse) {
             //Reverse Drive
-            if (null != robot.leftMotor) robot.leftMotor.setPower(-gamepad1.right_stick_y);
-            if (null != robot.rightMotor) robot.rightMotor.setPower(-gamepad1.left_stick_y);
-        }else if (gamepad1.left_bumper){
-            //slow Forward Drive
-            if (null != robot.leftMotor) robot.leftMotor.setPower(2 / (gamepad1.left_stick_y));
-            if (null != robot.rightMotor) robot.rightMotor.setPower(2 / (gamepad1.right_stick_y));
+          if (gamepad1.left_bumper) {
+              //slow Forward Drive
+              if (null != robot.leftMotor) robot.leftMotor.setPower(-gamepad1.left_stick_y / 2);
+              if (null != robot.rightMotor) robot.rightMotor.setPower(-gamepad1.right_stick_y / 2);
+          }
+              else
+            {
+                if (null != robot.leftMotor) robot.leftMotor.setPower(-gamepad1.right_stick_y);
+                if (null != robot.rightMotor) robot.rightMotor.setPower(-gamepad1.left_stick_y);
+
+            }
         }else {
-            //Forward Drive
-            if (null != robot.leftMotor) robot.leftMotor.setPower(gamepad1.left_stick_y);
-            if (null != robot.rightMotor) robot.rightMotor.setPower(gamepad1.right_stick_y);
+            if (gamepad1.left_bumper) {
+                //slow Forward Drive
+                if (null != robot.leftMotor) robot.leftMotor.setPower(gamepad1.left_stick_y / 2);
+                if (null != robot.rightMotor) robot.rightMotor.setPower(gamepad1.right_stick_y / 2);
+            } else {
+                //Forward Drive
+                if (null != robot.leftMotor) robot.leftMotor.setPower(gamepad1.left_stick_y);
+                if (null != robot.rightMotor) robot.rightMotor.setPower(gamepad1.right_stick_y);
+            }
         }
 
         ballFiringLoop();
