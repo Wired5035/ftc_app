@@ -16,7 +16,7 @@ public class AutoDoubleBeaconDelayBlue extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Hardware5035 robot = new Hardware5035();
-        robot.init(hardwareMap);
+        robot.init(hardwareMap,this);
         waitForStart();
 
         sleep(15000);

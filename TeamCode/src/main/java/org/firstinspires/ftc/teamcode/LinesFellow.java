@@ -17,7 +17,7 @@ public class LinesFellow extends LinearOpMode{
     @Override
     public void runOpMode(){
         Hardware5035 robot = new Hardware5035();
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
         telemetry.addData("Init", "true");
         telemetry.update();
         waitForStart();

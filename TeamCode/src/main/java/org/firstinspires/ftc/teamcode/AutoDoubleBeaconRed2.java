@@ -27,15 +27,15 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Hardware5035 robot = new Hardware5035();
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);// sets mode of drive motors for our encoders in autonomous
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         waitForStart();
-        /*
+
 
         ////////////////////////////////
 
-// Turn on ball shooter motors
+        // Turn on ball shooter motors
         robot.ballBooster1.setPower(1);
         robot.ballBooster2.setPower(1);
 
@@ -43,7 +43,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         robot.driveForward((OneFoot * 2.25) - 1);
 
 
-///////////////////////shooting the balls////////////////////////////////////
+        ///////////////////////shooting the balls////////////////////////////////////
 
         sleep(200);
         robot.triggered();
@@ -84,7 +84,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
 
         ////turns to be parallel with the wall
         robot.turnDegrees(-85.5);
-        */
+
 
         //////////Drive until 5 in from field wall using FWD ultrasonic////////////////////////
         /////////////////////////////If we can get the level then we can determin where we are, I don't know how to write the code so that

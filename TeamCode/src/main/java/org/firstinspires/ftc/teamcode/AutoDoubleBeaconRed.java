@@ -16,7 +16,7 @@ public class AutoDoubleBeaconRed extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Hardware5035 robot = new Hardware5035();
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
         waitForStart();
 
         //robot.turnDegrees(45);

@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 
 import android.hardware.Sensor;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -57,9 +59,9 @@ public class Hardware5035 {
     //ultrasonic
 
 
-
     /* local OpMode members. */
     HardwareMap hwMap = null;
+    LinearOpMode opmode;
     private ElapsedTime period = new ElapsedTime();
 
     /* Constructor */
@@ -68,10 +70,10 @@ public class Hardware5035 {
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap) {
+    public void init(HardwareMap ahwMap, LinearOpMode aOpMode) {
         // Save reference to Hardware map
         hwMap = ahwMap;
-
+        opmode = aOpMode;
         // Define and Initialize Motors
         colorDetector = hwMap.colorSensor.get("Detector");
         colorDetector.enableLed(false);
@@ -117,10 +119,11 @@ public class Hardware5035 {
         //Encoders are not currently hooked up. uncoment these lines when they are.
         ballBooster1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         ballBooster2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        ballDump.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        sweeperMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void stop()
-    {
+    public void stop() {
         sweeperMotor.setPower(0);
         leftMotor.setPower(0);
         rightMotor.setPower(0);
@@ -130,6 +133,7 @@ public class Hardware5035 {
         popUp.setPosition(1);
         constServo.setPosition(0.51);
     }
+
     /***
      * waitForTick implements a periodic delay. However, this acts like a metronome with a regular
      * periodic tick.  This is used to compensate for varying processing times for each cycle.
@@ -150,86 +154,71 @@ public class Hardware5035 {
         // Reset the cycle clock for the next pass.
         period.reset();
     }
+
     public void triggered() {
-        if(null != popUp)              popUp.setPosition(.70);
+        if (null != popUp) popUp.setPosition(.70);
     }
 
     public void detriggered() {
-        if(null != popUp)              popUp.setPosition(1);
+        if (null != popUp) popUp.setPosition(1);
     }
 
-    public double getPowerForTicksfordrive (int ticksToGo)
-    {
+    public double getPowerForTicksfordrive(int ticksToGo) {
         int multi = 3;
-        if (ticksToGo > 1440 * multi)
-        {
+        if (ticksToGo > 1440 * multi) {
             return .90;
         }
-        if (ticksToGo > 720 * multi)
-        {
+        if (ticksToGo > 720 * multi) {
             return .80;
         }
-        if (ticksToGo > 520 * multi)
-        {
+        if (ticksToGo > 520 * multi) {
             return .60;
         }
-        if (ticksToGo > 120 * multi)
-        {
+        if (ticksToGo > 120 * multi) {
             return .50;
         }
-        if (ticksToGo >= 0 * multi)
-        {
+        if (ticksToGo >= 0 * multi) {
             return .40;
         }
         return 0;
     }
 
-    public double getPowerForTicksforturn (int ticksToGo)
-    {
+    public double getPowerForTicksforturn(int ticksToGo) {
         int multi = 3;
-        if (ticksToGo > 1440 * multi)
-        {
+        if (ticksToGo > 1440 * multi) {
             return 1;
         }
-        if (ticksToGo > 720 * multi)
-        {
+        if (ticksToGo > 720 * multi) {
             return .75;
         }
-        if (ticksToGo > 520 * multi)
-        {
+        if (ticksToGo > 520 * multi) {
             return .5;
         }
-        if (ticksToGo > 120 * multi)
-        {
+        if (ticksToGo > 120 * multi) {
             return .4;
         }
-        if (ticksToGo >= 0 * multi)
-        {
+        if (ticksToGo >= 0 * multi) {
             return .2;
         }
         return 0;
     }
 
-    public void setDrivePower (double power)
-    {
+    public void setDrivePower(double power) {
         leftMotor.setPower(power);
         rightMotor.setPower(power);
     }
 
-    public int getTicksForTurn (double degrees)
-    {
-        int ticks = (int)(11.78 * Math.abs(degrees));
+    public int getTicksForTurn(double degrees) {
+        int ticks = (int) (11.78 * Math.abs(degrees));
         return ticks;
     }
 
-    public int inchToTickConverter (double inches)
-    {
+    public int inchToTickConverter(double inches) {
         return (int) (72.858708 * inches);
     }
 
 
-
-    public void turnDegrees (double degrees) throws InterruptedException {
+    public void turnDegrees(double degrees) throws InterruptedException {
         Reset_All_Encoders();
         int tickR = getTicksForTurn(degrees);
         int tickL = getTicksForTurn(degrees);
@@ -253,18 +242,19 @@ public class Hardware5035 {
         int rightTicksToGo = (tickR - rightMotor.getCurrentPosition() * basePowerR);
         int leftTicksToGo = (tickL - leftMotor.getCurrentPosition() * basePowerL);
 
-        while(rightTicksToGo > 0 || leftTicksToGo > 0) {
+        while (rightTicksToGo > 0 || leftTicksToGo > 0) {
+            if (opmode != null && opmode.isStopRequested()) {
+                return;
+            }
             double LPower = getPowerForTicksforturn(leftTicksToGo);
-            if (leftTicksToGo > 0)
-            {
+            if (leftTicksToGo > 0) {
                 leftMotor.setPower(LPower * basePowerL);
             } else {
                 leftMotor.setPower(0);
             }
 
             double RPower = getPowerForTicksforturn(rightTicksToGo);
-            if (rightTicksToGo > 0)
-            {
+            if (rightTicksToGo > 0) {
                 rightMotor.setPower(RPower * basePowerR);
             } else {
                 rightMotor.setPower(0);
@@ -282,16 +272,12 @@ public class Hardware5035 {
 
     }
 
-    public void Reset_All_Encoders () throws InterruptedException
-    {
-        while (rightMotor.getCurrentPosition() != 0 || leftMotor.getCurrentPosition() != 0)
-        {
-            if(rightMotor != null)
-            {
+    public void Reset_All_Encoders() throws InterruptedException {
+        while (rightMotor.getCurrentPosition() != 0 || leftMotor.getCurrentPosition() != 0) {
+            if (rightMotor != null) {
                 rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
-            if(leftMotor != null)
-            {
+            if (leftMotor != null) {
                 leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
             ///waitOneFullHardwareCycle(); needed?
@@ -314,7 +300,10 @@ public class Hardware5035 {
 
         //telemetry.addData("driveReverse start", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
         int count = 0;
-        while(rightMotor.getCurrentPosition() > tickR || leftMotor.getCurrentPosition() > tickL) {
+        while (rightMotor.getCurrentPosition() > tickR || leftMotor.getCurrentPosition() > tickL) {
+            if (opmode != null && opmode.isStopRequested()) {
+                return;
+            }
             leftMotor.setPower(-getPowerForTicksfordrive(leftMotor.getCurrentPosition() - tickL));
             rightMotor.setPower(-getPowerForTicksfordrive(rightMotor.getCurrentPosition() - tickR));
             //waitOneFullHardwareCycle();
@@ -324,6 +313,7 @@ public class Hardware5035 {
         //telemetry.addData("driveReverse end", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
         setDrivePower(0);
     }
+
     public void driveForward(double inches) throws InterruptedException {
 //12.6
 
@@ -334,7 +324,10 @@ public class Hardware5035 {
 
         //telemetry.addData("driveReverse start", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
         int count = 0;
-        while(rightMotor.getCurrentPosition() < ReversetickR || leftMotor.getCurrentPosition() < ReversetickL) {
+        while (rightMotor.getCurrentPosition() < ReversetickR || leftMotor.getCurrentPosition() < ReversetickL) {
+            if (opmode != null && opmode.isStopRequested()) {
+                return;
+            }
             leftMotor.setPower(getPowerForTicksfordrive(ReversetickL - leftMotor.getCurrentPosition()));
             rightMotor.setPower(getPowerForTicksfordrive(ReversetickL - rightMotor.getCurrentPosition()));
             //waitOneFullHardwareCycle();
@@ -346,6 +339,6 @@ public class Hardware5035 {
     }
 
 
-    }
+}
 
 

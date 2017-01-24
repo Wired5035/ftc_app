@@ -19,7 +19,7 @@ public class LineFollowingTest  extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Hardware5035 robot = new Hardware5035();
-        robot.init(hardwareMap);
+        robot.init(hardwareMap, this);
         //super.runOpMode();
         //robot.leftLightSensor.enableLed(true);
         //robot.rightLightSensor.enableLed(true);

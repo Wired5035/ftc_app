@@ -13,7 +13,7 @@ public class TestMode extends OpMode  {
 
     @Override
     public void init() {
-            robot.init(hardwareMap);
+            robot.init(hardwareMap, null);
 
     }
 
