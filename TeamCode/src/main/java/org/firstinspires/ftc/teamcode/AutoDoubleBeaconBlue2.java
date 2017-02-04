@@ -29,22 +29,21 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         robot.init(hardwareMap, this);
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);// sets mode of drive motors for our encoders in autonomous
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.ballDump.setPower(.3);
         waitForStart();
 
-
-        ////////////////////////////////
-
+////////////////////////////////////////Phase #1 turn on shooter motors, Drive forward, shoot and Drive to wall//////////////////////////////////////////////
 // Turn on ball shooter motors
-        robot.ballBooster1.setPower(1);
+        robot.ballBooster1.setPower(1);/////////////start motors for shooting/////////////
         robot.ballBooster2.setPower(1);
 
         // Driving the robot in position to shoot the balls
         robot.driveForward((OneFoot * 2.0) - 1);
 
 
-///////////////////////shooting the balls////////////////////////////////////
+///shooting the balls///
 
-        sleep(200);
+        sleep(100);
         robot.triggered();
         sleep(450);
         robot.detriggered();
@@ -52,142 +51,168 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         robot.triggered();
         sleep(450);
         robot.detriggered();
-
+        sleep(800);
+        robot.triggered();
+        sleep(450);
+        robot.detriggered();
         //////////////////turns off shooter///////////////////
         robot.ballBooster1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         robot.ballBooster1.setPower(0);
         robot.ballBooster2.setPower(0);
 
         /////////////// drive further to the ball     //
-        robot.driveForward(4);
+        robot.driveForward(3);
 
         ////////////// turns half way towards the wall and the first beacon////////////////
-        robot.turnDegrees(-66);
+        robot.turnDegrees(-60);
         // drive halfway toward the first beacon  ////////
-        robot.setDrivePower(.8);
-        robot.driveForward(31);
+        robot.setDrivePower(.75);
+        robot.driveForward(23);
         //turns rest of the way
-        robot.turnDegrees(-16);
+        robot.turnDegrees(-20);
 
 
-            telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
-            robot.setDrivePower(.25);
-            //drive using ultrasonic till ~14cm away from wall
-            telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
-            while(robot.frontUltra.getUltrasonicLevel() >= 18){
-                telemetry.addData("getUltrasonicLevel()", robot.frontUltra.getUltrasonicLevel());}//turn off drive power
-            robot.setDrivePower(0);
-            telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
+        telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
+    robot.setDrivePower(.25);
+        //drive using ultrasonic till ~14cm away from wall
+        telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
+        while(robot.frontUltra.getUltrasonicLevel() >= 20){
+            telemetry.addData("getUltrasonicLevel()", robot.frontUltra.getUltrasonicLevel());}//turn off drive power
+        robot.setDrivePower(0);
+        telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
 
-            telemetry.addData("getUltrasonicLevel()", robot.frontUltra.getUltrasonicLevel());
-            //sleep(5000);
+        telemetry.addData("getUltrasonicLevel()", robot.frontUltra.getUltrasonicLevel());
+        //sleep(5000);
 
-            ////turns to be parallel with the wall
-            robot.turnDegrees(-85);
+        ////turns to be parallel with the wall
 
-            robot.rightMotor.setPower(.3);
-            robot.leftMotor.setPower(.3);
 
-            sleep (300);
-
-            robot.rightMotor.setPower(0);
-            robot.leftMotor.setPower(0);
-
-            ////////////////////// Drive backwards to white line under the FIRST BEACON//////////////////////////////////
-
-            FindAndPushBeacon(robot);
-
-//////////////////         pulls beacon pusher arm 3/4 of the way back in      /////////////////////
-        robot.constServo.setPosition(1);
-        sleep(3200);
-
-        robot.constServo.setPosition(.51);
-
-            ///////////       Drives 1 foot toward the next beacon before starting to look for the line. the other line without finding it immediately.
-            robot.rightMotor.setPower(-.5);
-            robot.leftMotor.setPower(-.51);
-
-            sleep (700);
-
-            int current_tick  = robot.rightMotor.getCurrentPosition();
-            if (current_tick - robot.rightMotor.getCurrentPosition() > robot.inchToTickConverter(3))
+        //drives the rest of the way
+ /*ss       boolean gotToCorrectDistance = false;
+        robot.setDrivePower(.5);
+        //  telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
+        //drive using ultrasonic till ~14cm away from wall
+        //  telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
+        while (!gotToCorrectDistance)
+        {
+            // Do we know our distance right now?
+            if (robot.frontUltra.getUltrasonicLevel() != 0 && robot.frontUltra.getUltrasonicLevel() != 255)
             {
-                if (robot.sideUltra.getUltrasonicLevel() < 100 && robot.sideUltra.getUltrasonicLevel() != 0)
+                if ( robot.frontUltra.getUltrasonicLevel() > 20 )
                 {
-                    if (robot.sideUltra.getUltrasonicLevel() <= 10)
+                    robot.setDrivePower(0.25);
+                }
+                else if ( robot.frontUltra.getUltrasonicLevel() > 14 )
+                {
+                    robot.setDrivePower(0.15);
+                }
+                else if (robot.frontUltra.getUltrasonicLevel() > 10)
+                {
+                    robot.setDrivePower(.1);
+                }
+                else if (robot.frontUltra.getUltrasonicLevel() < 9)
+                {
+                    robot.setDrivePower(-.05);
+                }
+                else
+                {
+                    robot.setDrivePower(0);
+                    sleep(100);
+                    if (robot.frontUltra.getUltrasonicLevel() <= 10 && robot.frontUltra.getUltrasonicLevel() >= 9)
                     {
-                        robot.turnDegrees(5);
-                        current_tick = robot.rightMotor.getCurrentPosition();
-                    }
-                    else if (robot.sideUltra.getUltrasonicLevel() >= 12)
-                    {
-                        robot.turnDegrees(-5);
-                        current_tick = robot.rightMotor.getCurrentPosition();
+                        gotToCorrectDistance = true;
                     }
                 }
             }
-            // robot.driveReverse(23);
+ sss */          telemetry.addData("front ultra level", robot.frontUltra.getUltrasonicLevel());
+            telemetry.update();
+            idle();
+            if (isStopRequested())
+            {
+                break;
+            }
+        }
+        //turn off drive power
+        robot.setDrivePower(0);
+        //telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
 
-            //////////////////////////           Finds SECOND BEACON  line, and resets color sensor booleans             /////////////////
 
-            FindAndPushBeacon(robot);
+        sleep(200);
 
 
-            //////////////////     Turn a little so that when we back up we go away from the wall
-            robot.turnDegrees(-38);
+        ////turns to be parallel with the wall
+        robot.turnDegrees(-82);
+        ////////////////////////////////////////////////////////////////End of Phase #1//////////////////////////////////////////////////////////////////
 
-            ////////////////////         drives towards the ramp to get away from the wall and make a sharper turn      ///
-        robot.setDrivePower (1);
-        robot.driveForward(54);
+        ////////////////////////////////////////////////////Phase #2 Turn and test beacon color for beacon one//////////////////////////////////////////////////////////////////
+        robot.rightMotor.setPower(.3);
+        robot.leftMotor.setPower(.3);
 
+        sleep(125);
+
+        robot.rightMotor.setPower(0);
+        robot.leftMotor.setPower(0);
+
+        ////////////////////// Drive backwards to white line under the FIRST BEACON//////////////////////////////////
+
+        //
+        // ]\\\\\\\\
+        FindAndPushBeacon(robot, false);
 
         //////////////////         pulls beacon pusher arm 3/4 of the way back in      /////////////////////
         robot.constServo.setPosition(1);
-        sleep(3200);
+        sleep(2800);
 
         robot.constServo.setPosition(.51);
 
-            ////////////           Turn toward the center vortex                      ////////////
-           robot.turnDegrees(20);
+        ///////////       Drives 1 foot toward the next beacon before starting to look for the line. the other line without finding it immediately.
+        robot.driveReverse(8);
+
+        ///////////////////////////////////////////////////////////////Phase #3 test for Second Beacon/////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////End of Phase #3/////////////////////////////////////////////////////////////////
+
+        //////////////////////////           Finds SECOND BEACON  line, and resets color sensor booleans             /////////////////
+
+        FindAndPushBeacon(robot, false);
+
+        //////////////////     Turn a little so that when we back up we vier away from the wall
+        robot.turnDegrees(-38);
+
+        ////////////////////         drives towards the ramp to get away from the wall and make a sharper turn      ///
+        robot.setDrivePower(1);
+        robot.driveForward(54);
+
+        ////////////           Turn toward the center vortex                      ////////////
+        robot.turnDegrees(-20);
+
+        if (isStopRequested()) return;
+        //////////////////         pulls beacon pusher arm 3/4 of the way back in      /////////////////////
+       // robot.constServo.setPosition(1);
+        sleep(3000);
+
+        robot.constServo.setPosition(.51);
+
+        ////////////////             ensures a complete stop         ///////////////////////
+        robot.setDrivePower(0);
 
 
+    }
 
-            ////////////////             ensures a complete stop         ///////////////////////
-            robot.setDrivePower(0);
-
-
-        }
-
-    private void FindAndPushBeacon(Hardware5035 robot) throws InterruptedException {
+    private void FindAndPushBeacon(Hardware5035 robot, boolean trackWallDistance) throws InterruptedException {
         boolean found_color = false;
         boolean red_first = false;
         boolean found_left = false;
         boolean found_right = false;
 
+        int current_tick = robot.rightMotor.getCurrentPosition();
 
-        while (!found_left || !found_right)
-        {
-            if (found_color == false) ;
-            {
-                if (robot.colorDetector.red() > 1) {
-                    red_first = true;
-                    found_color = true;
+        while (!found_left || !found_right) {
 
-                }
-                if (robot.colorDetector.blue() > 1) {
-                    red_first = false;
-                    found_color = true;
-
-                }
-            }
-
-            ////////////////////    tells what color was seen first          /////////////////////////
-            telemetry.addData("Red First", red_first);
 
             /////////////////        Runs motors based on if LEFT LIGHT SENSOR SEES WHITE ///////////////////
             if (found_left == false) {
                 if (robot.leftLightSensor.getLightDetected() < .36) {
-                    robot.rightMotor.setPower(-.15);
+                    robot.rightMotor.setPower(-.2);
                 }
                 if (robot.leftLightSensor.getLightDetected() >= .36)  ///white
                 {
@@ -201,7 +226,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
 
             if (found_right == false) {
                 if (robot.rightLightSensor.getLightDetected() < .36) {
-                    robot.leftMotor.setPower(-.15);
+                    robot.leftMotor.setPower(-.2);
                 }
                 if (robot.rightLightSensor.getLightDetected() >= .36)///    white
                 {
@@ -210,63 +235,121 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
                 }
 
             }
+        //ssssssssssss
 
-            //////       I TOOK CODE FROM BELOW HERE       //////////////
-            int current_tick  = robot.rightMotor.getCurrentPosition();
-            if (current_tick - robot.rightMotor.getCurrentPosition() > robot.inchToTickConverter(3))
-            {
-                if (robot.sideUltra.getUltrasonicLevel() < 100 && robot.sideUltra.getUltrasonicLevel() != 0)
+            while(found_color == false){
+                if(robot.colorDetector.blue() > robot.colorDetector.red())
                 {
-                    if (robot.sideUltra.getUltrasonicLevel() <= 10)
-                    {
-                        robot.turnDegrees(5);
+                    red_first = false;
+                    found_color = true;
+                    telemetry.addData("Blue First", !red_first);
+                    telemetry.update();
+                    telemetry.addData("green", robot.colorDetector.green());
+                    telemetry.addData("alpha", robot.colorDetector.alpha());
+                    telemetry.addData("Red  ", robot.colorDetector.red());
+                    //  telemetry.addData("Green", robot.colorDetector.green());
+                    telemetry.addData("Blue ", robot.colorDetector.blue());//telemetry.addData("rightpower", robot.rightMotor.getPower());
+                    telemetry.update();
+                }
+                else if (robot.colorDetector.red() > robot.colorDetector.blue())
+                {
+                    red_first = true;
+                    found_color = true;
+                    telemetry.addData("Red First", red_first);
+                    telemetry.update();
+                    telemetry.addData("green", robot.colorDetector.green());
+                    telemetry.addData("alpha", robot.colorDetector.alpha());
+                    telemetry.addData("Red  ", robot.colorDetector.red());
+                    //  telemetry.addData("Green", robot.colorDetector.green());
+                    telemetry.addData("Blue ", robot.colorDetector.blue());//telemetry.addData("rightpower", robot.rightMotor.getPower());
+                    telemetry.update();
+                }
+                if (isStopRequested()) return;
+                idle();
+            }
+
+
+            ///????????  robot.setDrivePower(0);
+
+            if (red_first) {
+
+            }
+            else // if red_first is false
+            {
+                robot.driveReverse(3.5);
+            }
+
+            if (isStopRequested()) return;
+
+        //sssssssss
+
+            if (trackWallDistance && robot.sideUltra.getUltrasonicLevel() < 100 && robot.sideUltra.getUltrasonicLevel() != 0) {
+                if (Math.abs(current_tick - robot.rightMotor.getCurrentPosition()) > robot.inchToTickConverter(6)){
+                    if (robot.sideUltra.getUltrasonicLevel() > 12.5) {
+                        //robot.turnDegrees(-5);
+                        robot.rightMotor.setPower(0);
+                        sleep(100);
                         current_tick = robot.rightMotor.getCurrentPosition();
-                    }
-                    else if (robot.sideUltra.getUltrasonicLevel() >= 12)
-                    {
-                        robot.turnDegrees(-5);
+                    } else if (robot.sideUltra.getUltrasonicLevel() < 9.5) {
+                        //robot.turnDegrees(5);
+                        robot.leftMotor.setPower(0);
+                        sleep(100);
                         current_tick = robot.rightMotor.getCurrentPosition();
                     }
                 }
             }
 
-
             if (isStopRequested()) return;
             idle();
 
             // send the info back to driver station using telemetry function.
-            telemetry.addData("Clear", robot.colorDetector.alpha());
-            telemetry.addData("Red  ", robot.colorDetector.red());
-            telemetry.addData("Green", robot.colorDetector.green());
-            telemetry.addData("Blue ", robot.colorDetector.blue());
-            telemetry.addData("rightpower", robot.rightMotor.getPower());
+            //   telemetry.addData("Clear", robot.colorDetector.alpha());
             telemetry.addData("ultraDistance", robot.sideUltra.getUltrasonicLevel());
-            updateTelemetry(telemetry);
+            telemetry.update();
         }
+        robot.driveForward(3.5);
+
         robot.rightMotor.setPower(0);
         robot.leftMotor.setPower(0);
-      ///????????  robot.setDrivePower(0);
 
-        if (red_first == false) {
 
-        } else // if red_first is false
-        {
-            robot.driveForward(3);
+/*ssss
+        while(found_color == false){
+            if(robot.colorDetector.blue() > robot.colorDetector.red())
+            {
+                red_first = true;
+                found_color = true;
+                telemetry.addData("Blue First", !red_first);
+                telemetry.update();
+            }
+            else if (robot.colorDetector.red() > robot.colorDetector.blue())
+            {
+                red_first = false;
+                found_color = true;
+                telemetry.addData("Red First", red_first);
+                telemetry.update();
+            }
+           if (isStopRequested()) return;
+            idle();
         }
 
+
+        ///????????  robot.setDrivePower(0);
+
+        if (red_first) {
+
+        }
+            else // if red_first is false
+        {
+            robot.driveReverse(3.5);
+        }
+sss*/
         if (isStopRequested()) return;
 
         ////////////////            moves continuous rotation servo to push button on beacon          ///////////////////
         robot.constServo.setPosition(0);
-        sleep(4200);
-
-//////////////////         pulls beacon pusher arm 3/4 of the way back in      /////////////////////
-        robot.constServo.setPosition(1);
-        sleep(1200);
-
+        sleep(2000);
         robot.constServo.setPosition(.51);
-        if (isStopRequested()) return;
-
     }
 }
 

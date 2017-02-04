@@ -117,8 +117,8 @@ public class Hardware5035 {
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //Encoders are not currently hooked up. uncoment these lines when they are.
-        ballBooster1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        ballBooster2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        ballBooster1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        ballBooster2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         ballDump.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         sweeperMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -166,10 +166,10 @@ public class Hardware5035 {
     public double getPowerForTicksfordrive(int ticksToGo) {
         int multi = 3;
         if (ticksToGo > 1440 * multi) {
-            return .90;
+            return .75;
         }
         if (ticksToGo > 720 * multi) {
-            return .80;
+            return .70;
         }
         if (ticksToGo > 520 * multi) {
             return .60;
