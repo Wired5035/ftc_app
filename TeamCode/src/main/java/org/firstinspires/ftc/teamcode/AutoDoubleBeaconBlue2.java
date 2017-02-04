@@ -64,31 +64,15 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         robot.driveForward(3);
 
         ////////////// turns half way towards the wall and the first beacon////////////////
-        robot.turnDegrees(-60);
+        robot.turnDegrees(-67);
         // drive halfway toward the first beacon  ////////
         robot.setDrivePower(.75);
-        robot.driveForward(23);
+        robot.driveForward(25);
         //turns rest of the way
-        robot.turnDegrees(-20);
-
-
-        telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
-    robot.setDrivePower(.25);
-        //drive using ultrasonic till ~14cm away from wall
-        telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
-        while(robot.frontUltra.getUltrasonicLevel() >= 20){
-            telemetry.addData("getUltrasonicLevel()", robot.frontUltra.getUltrasonicLevel());}//turn off drive power
-        robot.setDrivePower(0);
-        telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
-
-        telemetry.addData("getUltrasonicLevel()", robot.frontUltra.getUltrasonicLevel());
-        //sleep(5000);
-
-        ////turns to be parallel with the wall
-
+        robot.turnDegrees(-15);
 
         //drives the rest of the way
- /*ss       boolean gotToCorrectDistance = false;
+        boolean gotToCorrectDistance = false;
         robot.setDrivePower(.5);
         //  telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
         //drive using ultrasonic till ~14cm away from wall
@@ -124,7 +108,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
                     }
                 }
             }
- sss */          telemetry.addData("front ultra level", robot.frontUltra.getUltrasonicLevel());
+            telemetry.addData("front ultra level", robot.frontUltra.getUltrasonicLevel());
             telemetry.update();
             idle();
             if (isStopRequested())
