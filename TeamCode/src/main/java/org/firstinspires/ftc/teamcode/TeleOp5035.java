@@ -40,7 +40,7 @@ public class TeleOp5035 extends OpMode {
     static final double DurUp = 50;
     static final double PickUpSpeed = .60; // power of the arm in the up direction
     static final double BallDumpIdlePower = 0.1;
-    static final double BallDumpRiseIdle = 0.2;
+    static final double BallDumpRiseIdle = 0.25;
     ElapsedTime BallPickUpTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     ElapsedTime SweepOutTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     ElapsedTime TriggerTImer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -66,6 +66,8 @@ public class TeleOp5035 extends OpMode {
         SweepOutTimer.reset();
         TriggerTImer.reset();
         FiringTImer.reset();
+        telemetry.addData("Version","1_1");
+        telemetry.update();
     }
 
     @Override
@@ -89,8 +91,7 @@ public class TeleOp5035 extends OpMode {
             if (gamepad1.left_bumper) {
                 //slow Forward Drive
                 if (null != robot.leftMotor) robot.leftMotor.setPower(-gamepad1.left_stick_y / 6);
-                if (null != robot.rightMotor)
-                    robot.rightMotor.setPower(-gamepad1.right_stick_y / 6);
+                if (null != robot.rightMotor) robot.rightMotor.setPower(-gamepad1.right_stick_y / 6);
             } else {
                 if (null != robot.leftMotor) robot.leftMotor.setPower(-gamepad1.right_stick_y);
                 if (null != robot.rightMotor) robot.rightMotor.setPower(-gamepad1.left_stick_y);
@@ -129,9 +130,9 @@ public class TeleOp5035 extends OpMode {
             runFiring = false;
             BallBoosterPoweringUp = true;
             if (null != robot.ballBooster1)
-                robot.ballBooster1.setPower(.85);
+                robot.ballBooster1.setPower(.6);
             if (null != robot.ballBooster2)
-                robot.ballBooster2.setPower(.85);
+                robot.ballBooster2.setPower(.6);
         }
 
         if(!gamepad2.right_bumper){
@@ -228,13 +229,13 @@ public class TeleOp5035 extends OpMode {
 
 
         if (null != robot.sweeperMotor) {
-            if (robot.grabbutton.isPressed()) {
-                robot.sweeperMotor.setPower(1);
-            }
-            else if (gamepad2.y) {
+            if (gamepad2.y) {
                 robot.sweeperMotor.setPower(-1);
             }
             else if (gamepad2.b) {
+                robot.sweeperMotor.setPower(1);
+            }
+            else if (robot.grabbutton.isPressed()) {
                 robot.sweeperMotor.setPower(1);
             }
             else if (robot.balldumpup.isPressed() && SweepOutTimer.milliseconds() < 1000)
