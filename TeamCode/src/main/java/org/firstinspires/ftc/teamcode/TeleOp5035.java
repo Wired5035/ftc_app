@@ -139,7 +139,7 @@ public class TeleOp5035 extends OpMode {
             robot.ballBooster1.setPower(0);
             robot.ballBooster2.setPower(0);
             BallBoosterPoweringUp = false;
-            robot.detriggered();
+        robot.detriggered();
         }
 
         if (BallBoosterPoweringUp) {
@@ -306,6 +306,7 @@ public class TeleOp5035 extends OpMode {
 //        telemetry.addData("this is a message", "you work right!!!");
 //        telemetry.update(); //this should work
     }
+
 
 }
 

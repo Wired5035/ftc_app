@@ -24,6 +24,8 @@ public class TestMode extends OpMode  {
         telemetry.addData("Red  ", robot.colorDetector.red());
         //  telemetry.addData("Green", robot.colorDetector.green());
         telemetry.addData("Blue ", robot.colorDetector.blue());//telemetry.addData("rightpower", robot.rightMotor.getPower());
+        telemetry.addData("sideultra ", robot.sideUltra.getUltrasonicLevel());
+        telemetry.addData("frontultra ", robot.frontUltra.getUltrasonicLevel());
         telemetry.update();
         /*
         if (gamepad1.x)
