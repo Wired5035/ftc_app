@@ -30,7 +30,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);// sets mode of drive motors for our encoders in autonomous
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.ballDump.setPower(.3);
-        telemetry.addData("Version","1_1_2_9");
+        telemetry.addData("Version","1_1_2_11");
         telemetry.update();
         waitForStart();
 
@@ -159,7 +159,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         FindAndPushBeacon(robot, false);
         ///////////////////////////////////////////////////////////////End of Phase #3/////////////////////////////////////////////////////////////////
         //////////////////     Turn a little so that when we back up we vier away from the wall
-        robot.turnDegrees(38);
+        robot.turnDegrees(48);
 
         ////////////////////         drives towards the ramp to get away from the wall and make a sharper turn      ///
         robot.driveReverse(54);
@@ -288,7 +288,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         ///????????  robot.setDrivePower(0);
 
         if (seeing_red) {
-            robot.driveReverse(3.5);
+            robot.driveReverse(2.5);
         }
         else // if red_first is false
         {
