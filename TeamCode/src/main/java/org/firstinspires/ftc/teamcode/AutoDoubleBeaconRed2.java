@@ -30,7 +30,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);// sets mode of drive motors for our encoders in autonomous
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.ballDump.setPower(.3);
-        telemetry.addData("Version","1_1_1_4");
+        telemetry.addData("Version","1_1_2_9");
         telemetry.update();
         waitForStart();
 
@@ -46,10 +46,6 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
 ///shooting the balls///
 
         sleep(100);
-        robot.triggered();
-        sleep(450);
-        robot.detriggered();
-        sleep(800);
         robot.triggered();
         sleep(450);
         robot.detriggered();
@@ -126,7 +122,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
 
 
         ////turns to be parallel with the wall
-        robot.turnDegrees(-98);
+        robot.turnDegrees(-93);
         ////////////////////////////////////////////////////////////////End of Phase #1//////////////////////////////////////////////////////////////////
 
         ////////////////////////////////////////////////////Phase #2 Turn and test beacon color for beacon one//////////////////////////////////////////////////////////////////
@@ -150,8 +146,10 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
 
         robot.constServo.setPosition(.51);
 
+        aline_to_wall(robot, 14, 14, true);
+
         ///////////       Drives 1 foot toward the next beacon before starting to look for the line. the other line without finding it immediately.
-        robot.driveForward(8);
+        //robot.driveForward(8);
 
         ///////////////////////////////////////////////////////////////Phase #3 test for Second Beacon/////////////////////////////////////////////////////////////////
 
@@ -167,7 +165,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         robot.driveReverse(54);
 
         ////////////           Turn toward the center vortex                      ////////////
-        robot.turnDegrees(20);
+        robot.turnDegrees(-20);
 
         if (isStopRequested()) return;
         //////////////////         pulls beacon pusher arm 3/4 of the way back in      /////////////////////
@@ -241,46 +239,46 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
 
             // send the info back to driver station using telemetry function.
             //   telemetry.addData("Clear", robot.colorDetector.alpha());
-            telemetry.addData("ultraDistance", robot.sideUltra.getUltrasonicLevel());
-            telemetry.update();
+            //  telemetry.addData("ultraDistance", robot.sideUltra.getUltrasonicLevel());
+            //  telemetry.update();
         }
-        robot.driveReverse(4.5);
+        robot.driveForward(3.5);
 
         robot.rightMotor.setPower(0);
         robot.leftMotor.setPower(0);
-        telemetry.addData("green", robot.colorDetector.green());
+     /*   telemetry.addData("green", robot.colorDetector.green());
         telemetry.addData("alpha", robot.colorDetector.alpha());
         telemetry.addData("Red  ", robot.colorDetector.red());
         //  telemetry.addData("Green", robot.colorDetector.green());
         telemetry.addData("Blue ", robot.colorDetector.blue());//telemetry.addData("rightpower", robot.rightMotor.getPower());
-        telemetry.update();
+      */  telemetry.update();
 
         while(found_color == false){
             if(robot.colorDetector.blue() > robot.colorDetector.red())
             {
                 seeing_red = false;
                 found_color = true;
-                telemetry.addData("Blue First", !seeing_red);
+          /*      telemetry.addData("Blue First", !seeing_red);
                 telemetry.update();
                 telemetry.addData("green", robot.colorDetector.green());
                 telemetry.addData("alpha", robot.colorDetector.alpha());
                 telemetry.addData("Red  ", robot.colorDetector.red());
                 //  telemetry.addData("Green", robot.colorDetector.green());
                 telemetry.addData("Blue ", robot.colorDetector.blue());//telemetry.addData("rightpower", robot.rightMotor.getPower());
-                telemetry.update();
+           */     telemetry.update();
             }
             else if (robot.colorDetector.red() > robot.colorDetector.blue())
             {
                 seeing_red = true;
                 found_color = true;
-                telemetry.addData("Red First", seeing_red);
+          /*      telemetry.addData("Red First", seeing_red);
                 telemetry.update();
                 telemetry.addData("green", robot.colorDetector.green());
                 telemetry.addData("alpha", robot.colorDetector.alpha());
                 telemetry.addData("Red  ", robot.colorDetector.red());
                 //  telemetry.addData("Green", robot.colorDetector.green());
                 telemetry.addData("Blue ", robot.colorDetector.blue());//telemetry.addData("rightpower", robot.rightMotor.getPower());
-                telemetry.update();
+          */      telemetry.update();
             }
             if (isStopRequested()) return;
             idle();
@@ -290,11 +288,11 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         ///????????  robot.setDrivePower(0);
 
         if (seeing_red) {
-
+            robot.driveReverse(3.5);
         }
         else // if red_first is false
         {
-            robot.driveForward(3.5);
+
         }
 
         if (isStopRequested()) return;
@@ -302,8 +300,47 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         ////////////////            moves continuous rotation servo to push button on beacon          ///////////////////
         robot.constServo.setPosition(0);
         telemetry.addData("done","Done");
-        sleep(3600);
+        sleep(2200);
 
         robot.constServo.setPosition(.51);
+    }
+
+    private void aline_to_wall(Hardware5035 robot, double distanceAway, double distanceNear, boolean active) throws InterruptedException {
+        double distance1;
+        double distance2;
+        //sleep(1000);
+        if(active){
+            distance1 = robot.sideUltra.getUltrasonicLevel();
+            robot.driveForward(8);
+            robot.constServo.setPosition(.51);
+            distance2 = robot.sideUltra.getUltrasonicLevel();
+            double angle = (90 - Math.toDegrees(Math.atan2((8 * 2.54), (distance2 - distance1))));
+            telemetry.addData("angle", angle);
+            telemetry.update();
+            //sleep(5000);
+            robot.turnDegrees(angle);
+
+            distance2 = robot.sideUltra.getUltrasonicLevel();
+            if(distance2 < (distanceNear+4)){
+                robot.turnDegrees(-8);
+                double driveDistance = ((distanceNear - distance2)*1.2) /* 1.414) / 2.54*/;
+                robot.driveForward(driveDistance);
+                robot.turnDegrees(8);
+                telemetry.addData("drive distance", driveDistance);
+                telemetry.addData("distance from wall", distance2);
+                telemetry.update();
+            } else if (distance2 > (distanceAway)+4){
+                robot.turnDegrees(8);
+                double driveDistance = ((distance2 - distanceAway)*1.2) /* 1.414) / 2.54*/;
+                robot.driveForward(driveDistance);
+                robot.turnDegrees(-8);
+                telemetry.addData("drive distance", driveDistance);
+                telemetry.addData("distance from wall", distance2);
+                telemetry.update();
+            }
+            // sleep(2000);
+
+        }
+
     }
 }

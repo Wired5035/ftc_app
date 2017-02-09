@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by Kota Baer on 11/22/2016.
@@ -11,10 +12,17 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class TestMode extends OpMode  {
     Hardware5035 robot = new Hardware5035();
 
+    boolean lastGamePad1A = false;
+    boolean lastGamePad1B = false;
+    ElapsedTime servoTimer;
+    boolean stopServo = false;
+
     @Override
     public void init() {
             robot.init(hardwareMap, null);
-
+        lastGamePad1A = false;
+        lastGamePad1B = false;
+        servoTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     @Override
@@ -51,5 +59,27 @@ public class TestMode extends OpMode  {
 
         telemetry.addData("getUltrasonicLevel()", robot.frontUltra.getUltrasonicLevel());
         */
+
+        if (!lastGamePad1A && gamepad1.a)
+        {
+            robot.constServo.setPosition(0);
+            stopServo = true;
+            servoTimer.reset();
+        }
+
+        if (!lastGamePad1B && gamepad1.b)
+        {
+            robot.constServo.setPosition(1);
+            stopServo = true;
+            servoTimer.reset();
+        }
+
+        if (stopServo && servoTimer.milliseconds() >= 3000)
+        {
+            robot.constServo.setPosition(.5);
+        }
+
+        lastGamePad1A = gamepad1.a;
+        lastGamePad1B = gamepad1.b;
     }
 }

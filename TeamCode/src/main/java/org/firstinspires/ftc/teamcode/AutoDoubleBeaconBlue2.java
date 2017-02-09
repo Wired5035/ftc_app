@@ -54,10 +54,10 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         robot.triggered();
         sleep(450);
         robot.detriggered();
-        sleep(800);
-        robot.triggered();
-        sleep(450);
-        robot.detriggered();
+      //  sleep(800);
+      //  robot.triggered();
+      //  sleep(450);
+      //  robot.detriggered();
         //////////////////turns off shooter///////////////////
         robot.ballBooster1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         robot.ballBooster1.setPower(0);
@@ -142,18 +142,19 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
 
         // ]\\\\\\\\
         FindAndPushBeacon(robot, false);
+        robot.constServo.setPosition(0);
+        sleep(1000);
 
         //////////////////         pulls beacon pusher arm 3/4 of the way back in      /////////////////////
         robot.constServo.setPosition(1);
         sleep(1400);
 
         robot.constServo.setPosition(.51);
-
+        robot.constServo.setPosition(1);
         ///////////       Drives 1 foot toward the next beacon before starting to look for the line. the other line without finding it immediately.
 
-        robot.driveReverse(8);
 
-        aline_to_wall(robot, 12, 10, true);
+        aline_to_wall(robot, 14, 14, true);
 
         ///////////////////////////////////////////////////////////////Phase #3 test for Second Beacon/////////////////////////////////////////////////////////////////
 
@@ -163,20 +164,23 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         FindAndPushBeacon(robot, false);
         ///////////////////////////////////////////////////////////////End of Phase #3/////////////////////////////////////////////////////////////////
         //////////////////     Turn a little so that when we back up we vier away from the wall
+
+        robot.constServo.setPosition(1);
+        sleep(600);
         robot.turnDegrees(-38);
 
         ////////////////////         drives towards the ramp to get away from the wall and make a sharper turn      ///
-        robot.driveForward(54);
 
+        robot.rightMotor.setPower(1);
+        robot.leftMotor.setPower(1);
+        sleep(2000);
+        robot.setDrivePower(0);
+        robot.constServo.setPosition(.51);
         ////////////           Turn toward the center vortex                      ////////////
         robot.turnDegrees(-20);
 
         if (isStopRequested()) return;
         //////////////////         pulls beacon pusher arm 3/4 of the way back in      /////////////////////
-        robot.constServo.setPosition(1);
-        sleep(1500);
-
-        robot.constServo.setPosition(.51);
 
         ////////////////             ensures a complete stop         ///////////////////////
         robot.setDrivePower(0);
@@ -304,7 +308,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         ////////////////            moves continuous rotation servo to push button on beacon          ///////////////////
         robot.constServo.setPosition(0);
         telemetry.addData("done","Done");
-        sleep(3600);
+        sleep(2200);
 
         robot.constServo.setPosition(.51);
     }
@@ -312,36 +316,37 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
     private void aline_to_wall(Hardware5035 robot, double distanceAway, double distanceNear, boolean active) throws InterruptedException {
         double distance1;
         double distance2;
-
+      //sleep(1000);
         if(active){
             distance1 = robot.sideUltra.getUltrasonicLevel();
             robot.driveReverse(8);
+            robot.constServo.setPosition(.51);
             distance2 = robot.sideUltra.getUltrasonicLevel();
             double angle = -(90 - Math.toDegrees(Math.atan2((8 * 2.54), (distance2 - distance1))));
             telemetry.addData("angle", angle);
             telemetry.update();
             //sleep(5000);
             robot.turnDegrees(angle);
-            //sleep(5000);
+
             distance2 = robot.sideUltra.getUltrasonicLevel();
-            if(distance2 < distanceNear){
-                robot.turnDegrees((18));
-                double driveDistance = (distanceNear - distance2) /* 1.414) / 2.54*/;
+            if(distance2 < (distanceNear+4)){
+                robot.turnDegrees((8));
+                double driveDistance = ((distanceNear - distance2)*1.2) /* 1.414) / 2.54*/;
                 robot.driveReverse(driveDistance);
-                robot.turnDegrees(-18);
+                robot.turnDegrees(-8);
                 telemetry.addData("drive distance", driveDistance);
                 telemetry.addData("distance from wall", distance2);
                 telemetry.update();
-            } else if (distance2 > distanceAway){
-                robot.turnDegrees((-18));
-                double driveDistance = (distance2 - distanceAway) /* 1.414) / 2.54*/;
+            } else if (distance2 > (distanceAway)+4){
+                robot.turnDegrees((-8));
+                double driveDistance = ((distance2 - distanceAway)*1.2) /* 1.414) / 2.54*/;
                 robot.driveReverse(driveDistance);
-                robot.turnDegrees(18);
+                robot.turnDegrees(8);
                 telemetry.addData("drive distance", driveDistance);
                 telemetry.addData("distance from wall", distance2);
                 telemetry.update();
             }
-            //sleep(5000);
+           // sleep(2000);
 
         }
 

@@ -13,13 +13,13 @@ public class AutoTestMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Hardware5035 robot = new Hardware5035();
         robot.init(hardwareMap, this);
-        telemetry.addData("Version","1_1_1_4");
+        telemetry.addData("Version","1_1_2_1");
         telemetry.update();
         waitForStart();
 
         //FindAndPushBeacon(robot, true);
 
-        aline_to_wall(robot, 12, 10, true);
+        aline_to_wall(robot, 14, 14, true);
         sleep(3000);
 
     }
@@ -151,36 +151,37 @@ public class AutoTestMode extends LinearOpMode {
     private void aline_to_wall(Hardware5035 robot, double distanceAway, double distanceNear, boolean active) throws InterruptedException {
         double distance1;
         double distance2;
-
+        //sleep(1000);
         if(active){
             distance1 = robot.sideUltra.getUltrasonicLevel();
-            robot.driveReverse(8);
+            robot.driveForward(8);
+            robot.constServo.setPosition(.51);
             distance2 = robot.sideUltra.getUltrasonicLevel();
-            double angle = -(90 - Math.toDegrees(Math.atan2((8 * 2.54), (distance2 - distance1))));
+            double angle = (90 - Math.toDegrees(Math.atan2((8 * 2.54), (distance2 - distance1))));
             telemetry.addData("angle", angle);
             telemetry.update();
             //sleep(5000);
             robot.turnDegrees(angle);
-            //sleep(5000);
+
             distance2 = robot.sideUltra.getUltrasonicLevel();
-            if(distance2 < distanceNear){
-                robot.turnDegrees((18));
-                double driveDistance = (distanceNear - distance2) /* 1.414) / 2.54*/;
-                robot.driveReverse(driveDistance);
-                robot.turnDegrees(-18);
+            if(distance2 < (distanceNear+4)){
+                robot.turnDegrees(-8);
+                double driveDistance = ((distanceNear - distance2)*1.2) /* 1.414) / 2.54*/;
+                robot.driveForward(driveDistance);
+                robot.turnDegrees(8);
                 telemetry.addData("drive distance", driveDistance);
                 telemetry.addData("distance from wall", distance2);
                 telemetry.update();
-            } else if (distance2 > distanceAway){
-                robot.turnDegrees((-18));
-                double driveDistance = (distance2 - distanceAway) /* 1.414) / 2.54*/;
-                robot.driveReverse(driveDistance);
-                robot.turnDegrees(18);
+            } else if (distance2 > (distanceAway)+4){
+                robot.turnDegrees(8);
+                double driveDistance = ((distance2 - distanceAway)*1.2) /* 1.414) / 2.54*/;
+                robot.driveForward(driveDistance);
+                robot.turnDegrees(-8);
                 telemetry.addData("drive distance", driveDistance);
                 telemetry.addData("distance from wall", distance2);
                 telemetry.update();
             }
-            //sleep(5000);
+            // sleep(2000);
 
         }
 
