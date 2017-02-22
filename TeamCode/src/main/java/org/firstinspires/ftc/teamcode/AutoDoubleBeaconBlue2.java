@@ -31,14 +31,13 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);// sets mode of drive motors for our encoders in autonomous
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.ballDump.setPower(.3);
-        telemetry.addData("Version","1_1_2_1");
+        telemetry.addData("Version","1_1_2_6");
         telemetry.update();
         waitForStart();
 
 ////////////////////////////////////////Phase #1 turn on shooter motors, Drive forward, shoot and Drive to wall//////////////////////////////////////////////
 // Turn on ball shooter motors
-        robot.ballBooster1.setPower(1);/////////////start motors for shooting/////////////
-        robot.ballBooster2.setPower(1);
+       robot.StartBallLaunchers();
 
         // Driving the robot in position to shoot the balls
         robot.driveForward(23);
@@ -84,19 +83,19 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
             // Do we know our distance right now?
             if (robot.frontUltra.getUltrasonicLevel() != 0 && robot.frontUltra.getUltrasonicLevel() != 255)
             {
-                if ( robot.frontUltra.getUltrasonicLevel() > 20 )
+                if ( robot.frontUltra.getUltrasonicLevel() > 22 )
                 {
                     robot.setDrivePower(0.25);
                 }
-                else if ( robot.frontUltra.getUltrasonicLevel() > 14 )
+                else if ( robot.frontUltra.getUltrasonicLevel() > 16 )
                 {
                     robot.setDrivePower(0.15);
                 }
-                else if (robot.frontUltra.getUltrasonicLevel() > 10)
+                else if (robot.frontUltra.getUltrasonicLevel() > 12)
                 {
                     robot.setDrivePower(.1);
                 }
-                else if (robot.frontUltra.getUltrasonicLevel() < 9)
+                else if (robot.frontUltra.getUltrasonicLevel() < 11)
                 {
                     robot.setDrivePower(-.05);
                 }
@@ -104,7 +103,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
                 {
                     robot.setDrivePower(0);
                     sleep(100);
-                    if (robot.frontUltra.getUltrasonicLevel() <= 10 && robot.frontUltra.getUltrasonicLevel() >= 9)
+                    if (robot.frontUltra.getUltrasonicLevel() <= 12 && robot.frontUltra.getUltrasonicLevel() >= 11)
                     {
                         gotToCorrectDistance = true;
                     }
@@ -123,7 +122,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         //telemetry.addData("ultravalue", robot.frontUltra.getUltrasonicLevel());//out put ultra value
 
 
-        sleep(100);
+        sleep(40);
 
 
         ////turns to be parallel with the wall
@@ -140,47 +139,48 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         robot.leftMotor.setPower(0);
 
 
-        // ]\\\\\\\\
+        /////////// Function connects to nearly the bottom of the code: finds the line, runs color seeking code, then pushes beacon.    /////////////
         FindAndPushBeacon(robot, false);
-        robot.constServo.setPosition(0);
-        sleep(1000);
 
-        //////////////////         pulls beacon pusher arm 3/4 of the way back in      /////////////////////
+
+        //////////////////         pulls beacon pusher arm in some and then keeps running until stopped inside aline_to_wall     /////////////////////
         robot.constServo.setPosition(1);
-        sleep(1400);
-
-        robot.constServo.setPosition(.51);
-        robot.constServo.setPosition(1);
-        ///////////       Drives 1 foot toward the next beacon before starting to look for the line. the other line without finding it immediately.
+        sleep(400);
+        ///////////////////////////////////////////////////////////////Phase #3 test for Second Beacon//////////////////////////////////////////////////////////////////////////////
 
 
+
+/////////// Function connects to the bottom of the code: aligns angle and then corrects distance to the wall    /////////////////////
         aline_to_wall(robot, 14, 14, true);
 
-        ///////////////////////////////////////////////////////////////Phase #3 test for Second Beacon/////////////////////////////////////////////////////////////////
 
 
-        //////////////////////////           Finds SECOND BEACON  line, and resets color sensor booleans             /////////////////
 
+
+/////////// Function connects to nearly the bottom of the code: finds the line, runs color seeking code, then pushes beacon.    /////////////
         FindAndPushBeacon(robot, false);
-        ///////////////////////////////////////////////////////////////End of Phase #3/////////////////////////////////////////////////////////////////
-        //////////////////     Turn a little so that when we back up we vier away from the wall
 
+        ///////////////////////////////////////////////////////////////End of Phase #3//////////////////////////////////////////////////////////////////////////////////////////////
+
+        /////////////pull arm in just long enough to get off the button///////
         robot.constServo.setPosition(1);
-        sleep(600);
+        sleep(300);
+        ///////////turns towards the center/////////
         robot.turnDegrees(-38);
 
-        ////////////////////         drives towards the ramp to get away from the wall and make a sharper turn      ///
 
+        //////////////      drives towards the center vortex while the arm is still pulling in       ////
         robot.rightMotor.setPower(1);
         robot.leftMotor.setPower(1);
-        sleep(2000);
+        sleep(1850);
         robot.setDrivePower(0);
+        //////////////////         stops arm     /////////////////////
         robot.constServo.setPosition(.51);
-        ////////////           Turn toward the center vortex                      ////////////
-        robot.turnDegrees(-20);
+        ////////////           hits the ball                      ////////////
+        robot.turnDegrees(40);
 
         if (isStopRequested()) return;
-        //////////////////         pulls beacon pusher arm 3/4 of the way back in      /////////////////////
+
 
         ////////////////             ensures a complete stop         ///////////////////////
         robot.setDrivePower(0);
@@ -206,7 +206,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
                 }
                 if (robot.leftLightSensor.getLightDetected() >= .36)  ///white
                 {
-                    robot.rightMotor.setPower(.09);
+                    robot.rightMotor.setPower(.2);
                     found_left = true;
                 }
 
@@ -250,7 +250,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
           //  telemetry.addData("ultraDistance", robot.sideUltra.getUltrasonicLevel());
           //  telemetry.update();
         }
-        robot.driveForward(4.5);
+        robot.driveForward(3.5);
 
         robot.rightMotor.setPower(0);
         robot.leftMotor.setPower(0);
@@ -260,6 +260,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         //  telemetry.addData("Green", robot.colorDetector.green());
         telemetry.addData("Blue ", robot.colorDetector.blue());//telemetry.addData("rightpower", robot.rightMotor.getPower());
       */  telemetry.update();
+
 
         while(found_color == false){
             if(robot.colorDetector.blue() > robot.colorDetector.red())
@@ -300,7 +301,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         }
         else // if red_first is false
         {
-            robot.driveReverse(3.5);
+            robot.driveReverse(2.8);
         }
 
         if (isStopRequested()) return;
@@ -308,7 +309,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         ////////////////            moves continuous rotation servo to push button on beacon          ///////////////////
         robot.constServo.setPosition(0);
         telemetry.addData("done","Done");
-        sleep(2200);
+        sleep(3200);
 
         robot.constServo.setPosition(.51);
     }
@@ -318,34 +319,37 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         double distance2;
       //sleep(1000);
         if(active){
+            robot.turnDegrees((8));
+            sleep(100);
             distance1 = robot.sideUltra.getUltrasonicLevel();
-            robot.driveReverse(8);
-            robot.constServo.setPosition(.51);
+            robot.driveReverse(14);
             distance2 = robot.sideUltra.getUltrasonicLevel();
-            double angle = -(90 - Math.toDegrees(Math.atan2((8 * 2.54), (distance2 - distance1))));
+            double angle = -(90 - Math.toDegrees(Math.atan2((14 * 2.54), (distance2 - distance1))));
             telemetry.addData("angle", angle);
             telemetry.update();
             //sleep(5000);
             robot.turnDegrees(angle);
-
+            //sleep(500);
+            robot.constServo.setPosition(.51);
             distance2 = robot.sideUltra.getUltrasonicLevel();
-            if(distance2 < (distanceNear+4)){
+            if(distance2 < (distanceNear )){
                 robot.turnDegrees((8));
-                double driveDistance = ((distanceNear - distance2)*1.2) /* 1.414) / 2.54*/;
+                double driveDistance = ((distanceNear - distance2)*1.3) /* 1.414) / 2.54*/;
                 robot.driveReverse(driveDistance);
                 robot.turnDegrees(-8);
                 telemetry.addData("drive distance", driveDistance);
                 telemetry.addData("distance from wall", distance2);
                 telemetry.update();
-            } else if (distance2 > (distanceAway)+4){
+            } else if (distance2 > (distanceAway)){
                 robot.turnDegrees((-8));
-                double driveDistance = ((distance2 - distanceAway)*1.2) /* 1.414) / 2.54*/;
+                double driveDistance = ((distance2 - distanceAway)*1.3) /* 1.414) / 2.54*/;
                 robot.driveReverse(driveDistance);
                 robot.turnDegrees(8);
                 telemetry.addData("drive distance", driveDistance);
                 telemetry.addData("distance from wall", distance2);
                 telemetry.update();
             }
+
            // sleep(2000);
 
         }

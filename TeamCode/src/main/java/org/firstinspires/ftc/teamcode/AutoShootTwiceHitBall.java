@@ -23,11 +23,14 @@ public class AutoShootTwiceHitBall extends LinearOpMode {
 
 ////////////////////////////////////////Phase #1 turn on shooter motors, Drive forward, shoot and Drive to wall//////////////////////////////////////////////
 // Turn on ball shooter motors
+        robot.StartBallLaunchers();
+        sleep(1000);
         robot.ballBooster1.setPower(1);/////////////start motors for shooting/////////////
         robot.ballBooster2.setPower(1);
-
         // Driving the robot in position to shoot the balls
         robot.driveForward(23);
+
+
 
 
 ///shooting the balls///

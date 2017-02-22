@@ -23,8 +23,7 @@ public class AutoDoubleBeaconDelayRed extends LinearOpMode {
         //robot.turnDegrees(45);
         //robot.turnDegrees(-45);
 
-        robot.ballBooster1.setPower(1);
-        robot.ballBooster2.setPower(1);
+        robot.StartBallLaunchers();
         robot.driveForward((OneFoot * 2.25) - 1);
 
         sleep(2000);

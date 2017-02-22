@@ -338,6 +338,15 @@ public class Hardware5035 {
         setDrivePower(0);
     }
 
+    public void StartBallLaunchers() throws InterruptedException {
+        ballBooster1.setPower(1);/////////////start motors for shooting/////////////
+        ballBooster2.setPower(1);
+        opmode.sleep(50);
+        ballBooster1.setPower(1);/////////////start motors for shooting/////////////
+        ballBooster2.setPower(1);
+        opmode.sleep(50);
+    }
+
 
 }
 

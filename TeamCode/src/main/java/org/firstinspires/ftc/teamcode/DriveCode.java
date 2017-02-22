@@ -24,6 +24,10 @@ public class DriveCode extends OpMode{
             //Forward Drive
             if (null != robot.leftMotor) robot.leftMotor.setPower(gamepad1.left_stick_y);
             if (null != robot.rightMotor) robot.rightMotor.setPower(gamepad1.right_stick_y);
+
+        telemetry.addData("Encoder values L", robot.leftMotor.getCurrentPosition());
+        telemetry.addData("Encoder values R", robot.rightMotor.getCurrentPosition());
+        telemetry.update();
     }
 
 

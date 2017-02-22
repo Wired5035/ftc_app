@@ -40,7 +40,7 @@ public class TeleOp5035 extends OpMode {
     static final double DurUp = 50;
     static final double PickUpSpeed = .60; // power of the arm in the up direction
     static final double BallDumpIdlePower = 0.1;
-    static final double BallDumpRiseIdle = 0.25;
+    static final double BallDumpRiseIdle = 0.35;
     ElapsedTime BallPickUpTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     ElapsedTime SweepOutTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     ElapsedTime TriggerTImer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -66,7 +66,7 @@ public class TeleOp5035 extends OpMode {
         SweepOutTimer.reset();
         TriggerTImer.reset();
         FiringTImer.reset();
-        telemetry.addData("Version","1_1");
+        telemetry.addData("Version","1_1_2_5");
         telemetry.update();
     }
 
@@ -143,6 +143,11 @@ public class TeleOp5035 extends OpMode {
         }
 
         if (BallBoosterPoweringUp) {
+            if (null != robot.ballBooster1)
+                robot.ballBooster1.setPower(.6);
+            if (null != robot.ballBooster2)
+                robot.ballBooster2.setPower(.6);
+
             if(!runFiring && TriggerTImer.milliseconds() >= 800) {
                 runFiring = true;
                 FiringTImer.reset();
@@ -254,7 +259,7 @@ public class TeleOp5035 extends OpMode {
             IsMovingBallPickUpArm = true;
             BallPickUpTimer.reset();
             robot.ballDump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            robot.ballDump.setPower(.8);//setting up arm motor up power
+            robot.ballDump.setPower(.6);//setting up arm motor up power
         }
 
 
