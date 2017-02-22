@@ -117,8 +117,8 @@ public class Hardware5035 {
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //Encoders are not currently hooked up. uncoment these lines when they are.
-        ballBooster1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        ballBooster2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        ballBooster1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        ballBooster2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         ballDump.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         sweeperMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -318,9 +318,9 @@ public class Hardware5035 {
 //12.6
 
         int multier = 0;
-        Reset_All_Encoders();
-        int ReversetickR = inchToTickConverter(inches);
-        int ReversetickL = inchToTickConverter(inches);
+        //Reset_All_Encoders();
+        int ReversetickR = rightMotor.getCurrentPosition() + inchToTickConverter(inches);
+        int ReversetickL = leftMotor.getCurrentPosition() + inchToTickConverter(inches);
 
         //telemetry.addData("driveReverse start", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
         int count = 0;

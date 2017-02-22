@@ -30,7 +30,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);// sets mode of drive motors for our encoders in autonomous
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.ballDump.setPower(.3);
-        telemetry.addData("Version","1_1_3_2");
+        telemetry.addData("Version","1_1_3_4");
         telemetry.update();
         waitForStart();
 
@@ -162,8 +162,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         robot.constServo.setPosition(1);
         sleep(300);
         ////////////////////       turn towards the center    ///////
-        robot.turnDegrees(38);
-
+        robot.turnDegrees(43);
         ////////////////////         drives towards the center      ///
 
         robot.rightMotor.setPower(-1);
@@ -245,7 +244,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
             //  telemetry.addData("ultraDistance", robot.sideUltra.getUltrasonicLevel());
             //  telemetry.update();
         }
-        robot.driveForward(3.5);
+        robot.driveForward(2.5);
 
         robot.rightMotor.setPower(0);
         robot.leftMotor.setPower(0);
@@ -291,7 +290,7 @@ public class AutoDoubleBeaconRed2 extends LinearOpMode {
         ///????????  robot.setDrivePower(0);
 
         if (seeing_red) {
-            robot.driveReverse(1.5);
+            robot.driveReverse(3.5);
         }
         else // if red_first is false
         {
