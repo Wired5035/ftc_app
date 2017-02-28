@@ -66,7 +66,7 @@ public class TeleOp5035 extends OpMode {
         SweepOutTimer.reset();
         TriggerTImer.reset();
         FiringTImer.reset();
-        telemetry.addData("Version","1_1_2_5");
+        telemetry.addData("Version","1_1_2_7");
         telemetry.update();
     }
 
@@ -255,11 +255,11 @@ public class TeleOp5035 extends OpMode {
 
 
 
-        if (gamepad2.dpad_up && !IsMovingBallPickUpArm && !robot.balldumpup.isPressed()) {// if trigger is pressed and the arm is not currently moving and the top button is not currently pressed move arm up
+        if (gamepad2.dpad_up && !IsMovingBallPickUpArm && !robot.balldumpup.isPressed()) {// if trigger is pressed and the arm is not currently moving and the top touch sensor is not currently pressed move arm up
             IsMovingBallPickUpArm = true;
             BallPickUpTimer.reset();
             robot.ballDump.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            robot.ballDump.setPower(.6);//setting up arm motor up power
+            robot.ballDump.setPower(1);//setting up arm motor up power
         }
 
 
@@ -280,20 +280,21 @@ public class TeleOp5035 extends OpMode {
                 else if (BallPickUpTimer.milliseconds() > 200) {
                     robot.ballDump.setPower(-.10);
                 }
-            } else {
+            } else { // else if power is not less than 0 VVV
+
                 if (robot.balldumpup.isPressed()) {
                     SweepOutTimer.reset();
                     robot.ballDump.setPower(BallDumpIdlePower);
                     IsMovingBallPickUpArm = false;
                 }
-                if (BallPickUpTimer.milliseconds() > 1000) {
+                if (BallPickUpTimer.milliseconds() > 1000) { // timer in milli secs before setting power to BallDumpRiseIdle
                     robot.ballDump.setPower(BallDumpRiseIdle);
                     IsMovingBallPickUpArm = false;
                 }
             }
         }
         if (robot.ballDump.getPower() == BallDumpRiseIdle && robot.balldumpup.isPressed()) {
-            robot.ballDump.setPower(BallDumpRiseIdle);
+            robot.ballDump.setPower(BallDumpIdlePower);
         }
 
          if (!robot.balldumpup.isPressed() && robot.ballDump.getPower() > 0 && !IsMovingBallPickUpArm)
