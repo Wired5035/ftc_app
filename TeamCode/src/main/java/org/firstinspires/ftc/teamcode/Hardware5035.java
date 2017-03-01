@@ -219,7 +219,11 @@ public class Hardware5035 {
 
 
     public void turnDegrees(double degrees) throws InterruptedException {
-        Reset_All_Encoders();
+        //Reset_All_Encoders();
+
+        int initialRightMotorPosition = rightMotor.getCurrentPosition();
+        int initialLeftMotorPosition = leftMotor.getCurrentPosition();
+
         int tickR = getTicksForTurn(degrees);
         int tickL = getTicksForTurn(degrees);
         int basePowerL = 0;
@@ -239,8 +243,8 @@ public class Hardware5035 {
         //telemetry.addData("driveReverse start", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
         int count = 0;
 
-        int rightTicksToGo = (tickR - rightMotor.getCurrentPosition() * basePowerR);
-        int leftTicksToGo = (tickL - leftMotor.getCurrentPosition() * basePowerL);
+        int rightTicksToGo = (tickR);
+        int leftTicksToGo = (tickL);
 
         while (rightTicksToGo > 0 || leftTicksToGo > 0) {
             if (opmode != null && opmode.isStopRequested()) {
@@ -262,8 +266,8 @@ public class Hardware5035 {
 
             //waitOneFullHardwareCycle();
 
-            rightTicksToGo = (tickR - rightMotor.getCurrentPosition() * basePowerR);
-            leftTicksToGo = (tickL - leftMotor.getCurrentPosition() * basePowerL);
+            rightTicksToGo = (tickR - (rightMotor.getCurrentPosition() - initialRightMotorPosition) * basePowerR);
+            leftTicksToGo = (tickL - (leftMotor.getCurrentPosition() - initialLeftMotorPosition) * basePowerL);
 
             ++count;
         }
@@ -307,6 +311,7 @@ public class Hardware5035 {
             leftMotor.setPower(-getPowerForTicksfordrive(leftMotor.getCurrentPosition() - tickL));
             rightMotor.setPower(-getPowerForTicksfordrive(rightMotor.getCurrentPosition() - tickR));
             //waitOneFullHardwareCycle();
+            opmode.idle();
             //telemetry.addData("driveReverse count", String.format("count= %d tickR=%d tickL=%d motorR=%d motorL=%d", count, tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
             ++count;
         }
@@ -329,8 +334,9 @@ public class Hardware5035 {
                 return;
             }
             leftMotor.setPower(getPowerForTicksfordrive(ReversetickL - leftMotor.getCurrentPosition()));
-            rightMotor.setPower(getPowerForTicksfordrive(ReversetickL - rightMotor.getCurrentPosition()));
+            rightMotor.setPower(getPowerForTicksfordrive(ReversetickR - rightMotor.getCurrentPosition()));
             //waitOneFullHardwareCycle();
+            opmode.idle();
             //telemetry.addData("driveReverse count", String.format("count= %d tickR=%d tickL=%d motorR=%d motorL=%d", count, tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
             ++count;
         }

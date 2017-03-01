@@ -66,7 +66,7 @@ public class TeleOp5035 extends OpMode {
         SweepOutTimer.reset();
         TriggerTImer.reset();
         FiringTImer.reset();
-        telemetry.addData("Version","1_1_2_7");
+        telemetry.addData("Version","1_1_2_8");
         telemetry.update();
     }
 
@@ -287,7 +287,7 @@ public class TeleOp5035 extends OpMode {
                     robot.ballDump.setPower(BallDumpIdlePower);
                     IsMovingBallPickUpArm = false;
                 }
-                if (BallPickUpTimer.milliseconds() > 1000) { // timer in milli secs before setting power to BallDumpRiseIdle
+                if (BallPickUpTimer.milliseconds() > 800) { // timer in milli secs before setting power to BallDumpRiseIdle
                     robot.ballDump.setPower(BallDumpRiseIdle);
                     IsMovingBallPickUpArm = false;
                 }
