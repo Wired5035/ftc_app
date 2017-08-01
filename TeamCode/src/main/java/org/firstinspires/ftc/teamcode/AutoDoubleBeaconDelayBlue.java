@@ -9,21 +9,22 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by Kota Baer on 10/11/2016.
  */
 
-@Autonomous(name = "AutoDoubleBeacon", group = "Concept")
-public class AutoDoubleBeacon extends LinearOpMode {
+@Autonomous(name = "AutoDoubleBeaconDelayBlue", group = "Concept")
+public class AutoDoubleBeaconDelayBlue extends LinearOpMode {
     double OneFoot = 12; //in inches
 
     @Override
     public void runOpMode() throws InterruptedException {
         Hardware5035 robot = new Hardware5035();
-        robot.init(hardwareMap);
+        robot.init(hardwareMap,this);
         waitForStart();
 
+        sleep(15000);
         //robot.turnDegrees(45);
         //robot.turnDegrees(-45);
         robot.ballBooster1.setPower(1);
         robot.ballBooster2.setPower(1);
-        robot.driveForward(OneFoot * 2.25);
+        robot.driveForward((OneFoot * 2.25) - 1);
 
         sleep(2000);
         robot.triggered();
