@@ -31,7 +31,7 @@ public class AutoDoubleBeaconBlue2 extends LinearOpMode {
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);// sets mode of drive motors for our encoders in autonomous
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.ballDump.setPower(.3);
-        telemetry.addData("Version","1_1_2_1");
+        telemetry.addData("Version","1_1_2_1_");
         telemetry.update();
         waitForStart();
 
