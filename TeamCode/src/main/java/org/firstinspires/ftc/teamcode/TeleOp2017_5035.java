@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name = "TeleOp50352")
+@TeleOp(name = "TeleOp2017_5035")
 public class TeleOp2017_5035 extends OpMode {
     Hardware5035 robot = new Hardware5035();
 
