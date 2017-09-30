@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.hardware.Sensor;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -35,6 +36,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Motor channel:  Left  driveReverse motor:        "left_drive"
  * Motor channel:  Right driveReverse motor:        "right_drive"
  */
+@Disabled
 public class Hardware5035 {
     /* Public OpMode members. */
     public DcMotor leftMotor = null;
@@ -76,9 +78,10 @@ public class Hardware5035 {
         // Save reference to Hardware map
         hwMap = ahwMap;
         opmode = aOpMode;
+        gyro = hwMap.gyroSensor.get("gyro");
         // Define and Initialize Motors
         colorDetector = hwMap.colorSensor.get("Detector");
-        colorDetector.enableLed(false);
+        //colorDetector.enableLed(false);
         frontUltra = hwMap.ultrasonicSensor.get("front ultra");
         sideUltra = hwMap.ultrasonicSensor.get("side ultra");
         constServo = hwMap.servo.get("const servo");
@@ -102,6 +105,8 @@ public class Hardware5035 {
         ballBooster2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         leftLightSensor.enableLed(true);
         rightLightSensor.enableLed(true);
+
+
 
 
         // Set all motors to zero power
