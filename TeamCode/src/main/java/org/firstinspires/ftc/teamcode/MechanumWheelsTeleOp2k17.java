@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /**
  * Created by Owner on 9/30/2017.
  */
-
+@TeleOp(name = "TeleOpMechanumWheels")
 public class MechanumWheelsTeleOp2k17 extends OpMode {
     testHardware5035 robot = new testHardware5035();
 
