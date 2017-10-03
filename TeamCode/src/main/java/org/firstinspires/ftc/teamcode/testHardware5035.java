@@ -38,26 +38,6 @@ public class testHardware5035 {
     public DcMotor leftMotorBack = null;
     public DcMotor rightMotorFront = null;
     public DcMotor rightMotorBack = null;
-   /* public DcMotor ballBooster1 = null;
-    public DcMotor ballBooster2 = null;
-    public DcMotor ballDump = null;
-    public DcMotor sweeperMotor = null;
-    public Servo popUp = null;
-    public TouchSensor grabbutton;
-    public TouchSensor balldumpup;
-    public LightSensor leftLightSensor;
-    public LightSensor rightLightSensor;
-    public ColorSensor colorDetector;
-    public UltrasonicSensor frontUltra;
-    public UltrasonicSensor sideUltra;
-    public Servo constServo;
-    public GyroSensor gyro;
-*/
-    //color
-    //ultrasonic
-    //light
-    //servo
-    //ultrasonic
 
 
     /* local OpMode members. */
@@ -72,70 +52,23 @@ public class testHardware5035 {
 
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap, LinearOpMode aOpMode) {
-        // Save reference to Hardware map
+            // Save reference to Hardware map
         hwMap = ahwMap;
         opmode = aOpMode;
-        gyro = hwMap.gyroSensor.get("gyro");
-        // Define and Initialize Motors
-        colorDetector = hwMap.colorSensor.get("Detector");
-        //colorDetector.enableLed(false);
-        frontUltra = hwMap.ultrasonicSensor.get("front ultra");
-        sideUltra = hwMap.ultrasonicSensor.get("side ultra");
-        constServo = hwMap.servo.get("const servo");
-        ballBooster1 = hwMap.dcMotor.get("ball booster 1");
-        ballBooster2 = hwMap.dcMotor.get("ball booster 2");
-        leftMotor = hwMap.dcMotor.get("left driveReverse");
-        rightMotor = hwMap.dcMotor.get("right driveReverse");
-        ballDump = hwMap.dcMotor.get("ball dump");
-        popUp = hwMap.servo.get("pop up");
-        sweeperMotor = hwMap.dcMotor.get("sweeperMotor");
-        grabbutton = hwMap.touchSensor.get("grab button");
-        balldumpup = hwMap.touchSensor.get("ballarmup");
-        leftLightSensor = hwMap.lightSensor.get("left Sensor");
-        rightLightSensor = hwMap.lightSensor.get("right Sensor");
-        leftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
-        rightMotor.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
-        ballBooster1.setDirection(DcMotor.Direction.FORWARD);
-        ballBooster2.setDirection(DcMotor.Direction.REVERSE);
-        ballDump.setDirection(DcMotor.Direction.REVERSE);
-        ballBooster1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        ballBooster2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        leftLightSensor.enableLed(true);
-        rightLightSensor.enableLed(true);
 
-
-
-
-        // Set all motors to zero power
-        sweeperMotor.setPower(0);
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
-        ballBooster1.setPower(0);
-        ballBooster2.setPower(0);
-        ballDump.setPower(0.10);
-        popUp.setPosition(1);
-        constServo.setPosition(0.51);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //Encoders are not currently hooked up. uncoment these lines when they are.
-        ballBooster1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        ballBooster2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        ballDump.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        sweeperMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftMotorFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftMotorBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotorBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotorFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
+        // Set all motors to zero power
     }
 
     public void stop() {
-        sweeperMotor.setPower(0);
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
-        ballBooster1.setPower(0);
-        ballBooster2.setPower(0);
-        ballDump.setPower(0.10);
-        popUp.setPosition(1);
-        constServo.setPosition(0.51);
     }
 
     /***
@@ -159,188 +92,6 @@ public class testHardware5035 {
         period.reset();
     }
 
-    public void triggered() {
-        if (null != popUp) popUp.setPosition(.70);
-    }
-
-    public void detriggered() {
-        if (null != popUp) popUp.setPosition(1);
-    }
-
-    public double getPowerForTicksfordrive(int ticksToGo) {
-        int multi = 3;
-        if (ticksToGo > 1440 * multi) {
-            return .75;
-        }
-        if (ticksToGo > 720 * multi) {
-            return .70;
-        }
-        if (ticksToGo > 520 * multi) {
-            return .60;
-        }
-        if (ticksToGo > 120 * multi) {
-            return .50;
-        }
-        if (ticksToGo >= 0 * multi) {
-            return .40;
-        }
-        return 0;
-    }
-
-    public double getPowerForTicksforturn(int ticksToGo) {
-        int multi = 3;
-        if (ticksToGo > 1440 * multi) {
-            return 1;
-        }
-        if (ticksToGo > 720 * multi) {
-            return .75;
-        }
-        if (ticksToGo > 520 * multi) {
-            return .5;
-        }
-        if (ticksToGo > 120 * multi) {
-            return .4;
-        }
-        if (ticksToGo >= 0 * multi) {
-            return .2;
-        }
-        return 0;
-    }
-
-    public void setDrivePower(double power) {
-        leftMotor.setPower(power);
-        rightMotor.setPower(power);
-    }
-
-    public int getTicksForTurn(double degrees) {
-        int ticks = (int) (11.78 * Math.abs(degrees));
-        return ticks;
-    }
-
-    public int inchToTickConverter(double inches) {
-        return (int) (72.858708 * inches);
-    }
-
-
-    public void turnDegrees(double degrees) throws InterruptedException {
-        Reset_All_Encoders();
-        int tickR = getTicksForTurn(degrees);
-        int tickL = getTicksForTurn(degrees);
-        int basePowerL = 0;
-        int basePowerR = 0;
-        if (degrees < 0)   // - makes the robot turn left + makes the robot turn right
-        {
-            basePowerL = -1;
-            basePowerR = 1;
-        } else if (degrees >= 0) {
-            basePowerL = 1;
-            basePowerR = -1;
-        }
-
-        //tickR *= basePowerR;
-        //tickL *= basePowerL;
-
-        //telemetry.addData("driveReverse start", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
-        int count = 0;
-
-        int rightTicksToGo = (tickR - rightMotor.getCurrentPosition() * basePowerR);
-        int leftTicksToGo = (tickL - leftMotor.getCurrentPosition() * basePowerL);
-
-        while (rightTicksToGo > 0 || leftTicksToGo > 0) {
-            if (opmode != null && opmode.isStopRequested()) {
-                return;
-            }
-            double LPower = getPowerForTicksforturn(leftTicksToGo);
-            if (leftTicksToGo > 0) {
-                leftMotor.setPower(LPower * basePowerL);
-            } else {
-                leftMotor.setPower(0);
-            }
-
-            double RPower = getPowerForTicksforturn(rightTicksToGo);
-            if (rightTicksToGo > 0) {
-                rightMotor.setPower(RPower * basePowerR);
-            } else {
-                rightMotor.setPower(0);
-            }
-
-            //waitOneFullHardwareCycle();
-
-            rightTicksToGo = (tickR - rightMotor.getCurrentPosition() * basePowerR);
-            leftTicksToGo = (tickL - leftMotor.getCurrentPosition() * basePowerL);
-
-            ++count;
-        }
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
-
-    }
-
-    public void Reset_All_Encoders() throws InterruptedException {
-        while (rightMotor.getCurrentPosition() != 0 || leftMotor.getCurrentPosition() != 0) {
-            if (rightMotor != null) {
-                rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
-            if (leftMotor != null) {
-                leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
-            ///waitOneFullHardwareCycle(); needed?
-
-        }
-
-
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //waitOneFullHardwareCycle(); needed?
-    }
-
-    public void driveReverse(double inches) throws InterruptedException {
-//12.6
-
-        int multier = 0;
-        //Reset_All_Encoders();
-        int tickR = rightMotor.getCurrentPosition() - inchToTickConverter(inches);
-        int tickL = leftMotor.getCurrentPosition() - inchToTickConverter(inches);
-
-        //telemetry.addData("driveReverse start", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
-        int count = 0;
-        while (rightMotor.getCurrentPosition() > tickR || leftMotor.getCurrentPosition() > tickL) {
-            if (opmode != null && opmode.isStopRequested()) {
-                return;
-            }
-            leftMotor.setPower(-getPowerForTicksfordrive(leftMotor.getCurrentPosition() - tickL));
-            rightMotor.setPower(-getPowerForTicksfordrive(rightMotor.getCurrentPosition() - tickR));
-            //waitOneFullHardwareCycle();
-            //telemetry.addData("driveReverse count", String.format("count= %d tickR=%d tickL=%d motorR=%d motorL=%d", count, tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
-            ++count;
-        }
-        //telemetry.addData("driveReverse end", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
-        setDrivePower(0);
-    }
-
-    public void driveForward(double inches) throws InterruptedException {
-//12.6
-
-        int multier = 0;
-        Reset_All_Encoders();
-        int ReversetickR = inchToTickConverter(inches);
-        int ReversetickL = inchToTickConverter(inches);
-
-        //telemetry.addData("driveReverse start", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
-        int count = 0;
-        while (rightMotor.getCurrentPosition() < ReversetickR || leftMotor.getCurrentPosition() < ReversetickL) {
-            if (opmode != null && opmode.isStopRequested()) {
-                return;
-            }
-            leftMotor.setPower(getPowerForTicksfordrive(ReversetickL - leftMotor.getCurrentPosition()));
-            rightMotor.setPower(getPowerForTicksfordrive(ReversetickL - rightMotor.getCurrentPosition()));
-            //waitOneFullHardwareCycle();
-            //telemetry.addData("driveReverse count", String.format("count= %d tickR=%d tickL=%d motorR=%d motorL=%d", count, tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
-            ++count;
-        }
-        //telemetry.addData("driveReverse end", String.format("tickR=%d tickL=%d motorR=%d motorL=%d", tickR, tickL, motorRightRemote1.getCurrentPosition(), motorLeftRemote1.getCurrentPosition()));
-        setDrivePower(0);
-    }
 
 
 }
