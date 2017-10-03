@@ -55,6 +55,11 @@ public class testHardware5035 {
             // Save reference to Hardware map
         hwMap = ahwMap;
         opmode = aOpMode;
+        rightMotorFront = hwMap.dcMotor.get("rf");
+        rightMotorBack = hwMap.dcMotor.get("rb");
+        leftMotorFront = hwMap.dcMotor.get("lf");
+        leftMotorBack = hwMap.dcMotor.get("lb");
+        
 
 
         // Set all motors to run without encoders.
