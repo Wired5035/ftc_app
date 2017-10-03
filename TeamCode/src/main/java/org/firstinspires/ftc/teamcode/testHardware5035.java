@@ -59,7 +59,7 @@ public class testHardware5035 {
         rightMotorBack = hwMap.dcMotor.get("rb");
         leftMotorFront = hwMap.dcMotor.get("lf");
         leftMotorBack = hwMap.dcMotor.get("lb");
-        
+
 
 
         // Set all motors to run without encoders.
