@@ -22,12 +22,12 @@ public class MechanumWheelsTeleOp2k17 extends OpMode {
         if (null != robot.leftMotorFront) robot.leftMotorFront.setPower(gamepad1.left_stick_y);
         if (null != robot.leftMotorBack) robot.leftMotorBack.setPower(gamepad1.left_stick_y);
         if (null != robot.rightMotorFront) robot.rightMotorFront.setPower(-gamepad1.left_stick_y);
-        if (null != robot.rightMotorBack) robot.leftMotorBack.setPower(-gamepad1.left_stick_y);
+        if (null != robot.rightMotorBack) robot.rightMotorBack.setPower(-gamepad1.left_stick_y);
         //code for going directly side to side
         if (null != robot.leftMotorFront) robot.leftMotorFront.setPower(-gamepad1.left_stick_x);
         if (null != robot.leftMotorBack) robot.leftMotorBack.setPower(gamepad1.left_stick_x);
         if (null != robot.rightMotorFront) robot.rightMotorFront.setPower(-gamepad1.left_stick_x);
-        if (null != robot.rightMotorBack) robot.leftMotorBack.setPower(gamepad1.left_stick_x);
+        if (null != robot.rightMotorBack) robot.rightMotorBack.setPower(gamepad1.left_stick_x);
         //turning left
         if (null != robot.leftMotorFront) robot.leftMotorFront.setPower(gamepad1.right_stick_x);
         if (null != robot.leftMotorBack) robot.leftMotorBack.setPower(gamepad1.right_stick_x);
